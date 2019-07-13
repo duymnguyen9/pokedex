@@ -22,8 +22,7 @@ Map<String, Gradient> pokemonStatsGradient = {
       ],
       colors: [
         const Color(0xff6CBDE4),
-                const Color(0xff4A90DD),
-
+        const Color(0xff4A90DD),
       ]),
 };
 
@@ -51,7 +50,6 @@ Map<String, Gradient> pokemonColorsGradient = {
         const Color(0xff69B9E3),
       ]),
 };
-
 
 Map<String, Color> pokemonColors = {
   "grass": Color(0xFF5DBE62),
@@ -88,7 +86,12 @@ class PokemonPageUltility {
   PokemonPageUltility(this.pokemon);
 }
 
-double sketchSizeConversion(double sketchValue) {
-  //return sketchValue * 1.103;
-  return sketchValue;
+String upperCaseEveryWords(String inputText) {
+  List<String> wordList = inputText.split(' ');
+  List<String> outputWords = [];
+
+  for (var word in wordList) {
+    outputWords.add(word[0].toUpperCase() + word.substring(1));
+  }
+  return outputWords.join(' ');
 }

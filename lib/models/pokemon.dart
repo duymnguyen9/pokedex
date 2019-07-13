@@ -48,7 +48,9 @@ class Pokemon {
       this.imgUrl});
 
   factory Pokemon.fromJson(
-      {Map<String, dynamic> pokemonJson, Map<String, dynamic> speciesJson}) {
+      {Map<String, dynamic> pokemonJson,
+      Map<String, dynamic> speciesJson,
+      Map<String, String> abilitiesFlavor}) {
     var typesFromJson = pokemonJson['types'] as List;
     List<PokemonType> pokemonTypes =
         typesFromJson.map((i) => PokemonType.fromJson(i)).toList();
@@ -59,11 +61,30 @@ class Pokemon {
     List<PokemonMove> pokemonMoves =
         movesFromJson.map((i) => PokemonMove.fromJson(i)).toList();
     var abilitiesFromJson = pokemonJson['abilities'] as List;
-    List<PokemonAbility> pokemonAbilities =
-        abilitiesFromJson.map((i) => PokemonAbility.fromJson(i)).toList();
-    var eggGroupFromJson = speciesJson['egg_groups'] as List;
-    List<String> pokemonEggGroup = eggGroupFromJson.map((i) => i['name'].toString()).toList();
 
+    List<PokemonAbility> pokemonAbilities = [];
+    for (var ability in abilitiesFromJson) {
+      pokemonAbilities.add(PokemonAbility.fromJson(
+          ability, abilitiesFlavor[ability['ability']['name']]));
+    }
+    // List<PokemonAbility> pokemonAbilities =
+    //     abilitiesFromJson.map((i) => PokemonAbility.fromJson(i)).toList();
+    var eggGroupFromJson = speciesJson['egg_groups'] as List;
+
+    int convertEggGroupUrlToInt(String inputUrl){
+      return int.parse(inputUrl.replaceAll('https://pokeapi.co/api/v2/egg-group/','').replaceAll('/',''));
+    }
+    List<Map> pokemonEggGroupMapList =
+        eggGroupFromJson.map((i) => {'eggGroup':i['name'].toString(), 'index':convertEggGroupUrlToInt(i['url'])}).toList();
+       pokemonEggGroupMapList.sort((a, b) => a['index'].compareTo(b['index']));
+    List<String> pokemonEggGroup(){
+      List<String> outputList = [];
+      for(var element in pokemonEggGroupMapList){
+        outputList.add(element['eggGroup']);
+      }
+      return outputList;
+    }
+    
     String baseImgUrl =
         'https://assets.pokemon.com/assets/cms2/img/pokedex/full/';
     String idString = pokemonJson['id'].toString().padLeft(3, '0');
@@ -79,11 +100,12 @@ class Pokemon {
         description: speciesJson['flavor_text_entries'][1]['flavor_text'],
         evolutionUrl: speciesJson['evolution_chain']['url'],
         genderRate: speciesJson['gender_rate'],
-        eggGroup: pokemonEggGroup,
+        eggGroup: pokemonEggGroup(),
         hatchCycle: speciesJson['hatch_counter'],
         habitat: speciesJson['habitat']['name'],
         captureRate: speciesJson['capture_rate'],
-        imgUrl: baseImgUrl + idString + '.png');
+        imgUrl: baseImgUrl + idString + '.png',
+        generation: 'Generation ' + speciesJson['generation']['url'].replaceAll('https://pokeapi.co/api/v2/generation/','').replaceAll('/',''));
   }
 }
 
@@ -132,12 +154,17 @@ class PokemonMove {
 class PokemonAbility {
   final String name;
   final bool isHidden;
+  final int slot;
+  final String description;
 
-  PokemonAbility({this.name, this.isHidden});
+  PokemonAbility({this.slot, this.description, this.name, this.isHidden});
 
-  factory PokemonAbility.fromJson(Map<String, dynamic> json) {
+  factory PokemonAbility.fromJson(Map<String, dynamic> json, String flavor) {
     return PokemonAbility(
-        name: json['ability']['name'], isHidden: json['is_hidden']);
+        name: json['ability']['name'],
+        slot: json['slot'],
+        isHidden: json['is_hidden'],
+        description: flavor);
   }
 }
 

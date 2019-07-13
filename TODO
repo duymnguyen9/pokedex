@@ -1,0 +1,14 @@
+TODOS:
+  Individual Pokemon Page:@high
+    ✔ Stats Panel @done(19-07-11 17:00)
+    ✔ Ability Panel @done(19-07-11 17:00)
+    ✔ Breeding Panel @done(19-07-12 17:33)
+    ☐ Evolutions Panel
+    ☐ Moves Panel
+    ☐ Animation
+      ☐ pokemon image
+      ☐ statbar
+      ☐ background gradient
+      ☐ sheet pullup animation
+  Pokemon List Page:
+    ☐ use Moor and Provider to create store pokemon data

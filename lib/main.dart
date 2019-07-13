@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
   const MyApp({Key key, this.pokemon}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-//TODO: user Moor and provider to create store pokemon data
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

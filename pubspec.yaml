@@ -23,6 +23,8 @@ dependencies:
   json_annotation: ^2.4.0
   flutter_screenutil: ^0.5.3
   bubble_tab_indicator: ^0.1.4
+  percent_indicator: ^2.1.1
+
 
 
 
@@ -45,6 +47,9 @@ flutter:
   assets:
     - assets/img/tag/
     - assets/img/type/
+    - assets/img/gender_ring.png
+    - assets/img/capture_pokeball.png
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

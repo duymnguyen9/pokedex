@@ -63,6 +63,10 @@ class PokemonPageBuild extends StatelessWidget {
             Container(
                 margin: EdgeInsets.only(top: screenUtil.setHeight(90)),
                 child: Center(
+                  // child: Placeholder(
+                  //   fallbackWidth: screenUtil.setWidth(180),
+                  //   fallbackHeight: screenUtil.setHeight(180),
+                  // ),
                   child: Image.network(
                     pokemon.imgUrl,
                     width: screenUtil.setWidth(180),
@@ -84,7 +88,7 @@ class PokemonPageBuild extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(top: screenUtil.setWidth(57)),
+          margin: EdgeInsets.only(top: screenUtil.setHeight(57), bottom: screenUtil.setHeight(10)),
           width: size.width,
           child: Center(
             child: Text(
@@ -106,22 +110,6 @@ class PokemonPageBuild extends StatelessWidget {
           screenUtil: screenUtil,
         ),
       ],
-    );
-  }
-
-  Widget sectionTitle(String title) {
-    Color pokemonColor = pokemonPageUltility().pokemonColor();
-    return Container(
-      height: screenUtil.setHeight(60),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(
-              color: pokemonColor,
-              fontFamily: 'Avenir-Book',
-              fontSize: screenUtil.setSp(20)),
-        ),
-      ),
     );
   }
 
@@ -154,6 +142,4 @@ class PokemonPageBuild extends StatelessWidget {
       ),
     );
   }
-
-
 }
