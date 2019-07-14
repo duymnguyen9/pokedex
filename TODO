@@ -3,12 +3,15 @@ TODOS:
     ✔ Stats Panel @done(19-07-11 17:00)
     ✔ Ability Panel @done(19-07-11 17:00)
     ✔ Breeding Panel @done(19-07-12 17:33)
-    ☐ Evolutions Panel
-    ☐ Moves Panel
+    ✔ Evolutions Panel @done(19-07-14 11:19)
+    ✔ Moves Panel @done(19-07-14 11:19)
     ☐ Animation
       ☐ pokemon image
       ☐ statbar
       ☐ background gradient
       ☐ sheet pullup animation
+  Pokemon List Page:
+    ☐ pokemon List page template
+    ☐ 
   Pokemon List Page:
     ☐ use Moor and Provider to create store pokemon data

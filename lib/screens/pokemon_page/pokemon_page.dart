@@ -130,7 +130,7 @@ class PokemonPageBuild extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(screenUtil.setWidth(18)),
       child: Center(
-        child: Text(pokemon.description,
+        child: Text(pokemon.description.replaceAll('\n', ' '),
             softWrap: true,
             textAlign: TextAlign.center,
             style: TextStyle(

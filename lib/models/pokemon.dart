@@ -10,7 +10,7 @@ class Pokemon {
   final String imgUrl;
 
   final String description;
-  final String evolutionUrl;
+  final List<Map<String, String>> evolutionList;
   final int genderRate;
   final List<String> eggGroup;
   final int hatchCycle;
@@ -33,7 +33,7 @@ class Pokemon {
       {this.id,
       this.name,
       this.description,
-      this.evolutionUrl,
+      this.evolutionList,
       this.genderRate,
       this.eggGroup,
       this.hatchCycle,
@@ -50,7 +50,9 @@ class Pokemon {
   factory Pokemon.fromJson(
       {Map<String, dynamic> pokemonJson,
       Map<String, dynamic> speciesJson,
-      Map<String, String> abilitiesFlavor}) {
+      Map<String, String> abilitiesFlavor,
+      List<Map<String, String>> evolution
+      }) {
     var typesFromJson = pokemonJson['types'] as List;
     List<PokemonType> pokemonTypes =
         typesFromJson.map((i) => PokemonType.fromJson(i)).toList();
@@ -98,7 +100,7 @@ class Pokemon {
         abilities: pokemonAbilities,
         sprites: PokemonSprite.fromJson(pokemonJson['sprites']),
         description: speciesJson['flavor_text_entries'][1]['flavor_text'],
-        evolutionUrl: speciesJson['evolution_chain']['url'],
+        evolutionList: evolution,
         genderRate: speciesJson['gender_rate'],
         eggGroup: pokemonEggGroup(),
         hatchCycle: speciesJson['hatch_counter'],
@@ -178,4 +180,8 @@ class PokemonSprite {
     return PokemonSprite(
         frontUrl: json['front_default'], shinyUrl: json['front_shiny']);
   }
+}
+
+class PokemonEvolutions{
+
 }

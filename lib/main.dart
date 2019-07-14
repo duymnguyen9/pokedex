@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 //Internal Package
 import 'package:pokedex/components/splash/splash.dart';
 import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/screens/pokemon_page.dart';
+import 'package:pokedex/screens//pokemon_page/pokemon_page.dart';
 import 'package:pokedex/services/http/pokemon_service.dart';
 
 void main() {
-  runApp(MyApp(pokemon: PokemonService(pokemonID: 7).fetchPokemon()));
+  runApp(MyApp(pokemon: PokemonService(pokemonID: 4).fetchPokemon()));
+
 }
 
 class MyApp extends StatelessWidget {

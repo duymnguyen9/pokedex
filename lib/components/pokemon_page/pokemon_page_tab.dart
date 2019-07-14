@@ -11,6 +11,9 @@ import 'package:percent_indicator/percent_indicator.dart';
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
+import 'package:pokedex/components/pokemon_page/pokemon_page_evolution_tab.dart';
+import 'package:pokedex/components/pokemon_page/pokemon_page_moves_tab.dart';
+
 
 class PokemonTabPanel extends StatefulWidget {
   PokemonTabPanel({Key key, this.pokemon, this.screenUtil}) : super(key: key);
@@ -56,8 +59,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
     BoxDecoration tabBarIndicatorBoxDecoration = BoxDecoration(
       color: pokemonPageUltility().pokemonColor(),
       borderRadius: BorderRadius.circular(widget.screenUtil.setWidth(22.5)),
-      border: Border.all(
-          width: widget.screenUtil.setWidth(1), color: const Color(0XFF979797)),
+      // border: Border.all(
+      //     width: widget.screenUtil.setWidth(1), color: const Color(0XFF979797)),
       boxShadow: [
         BoxShadow(
             color: Color(0XB3559EDF),
@@ -111,11 +114,11 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
   Widget tabBarPages() {
     return Container(
-      height: 1200,
+      height: 1400,
       child: TabBarView(controller: tabController, children: <Widget>[
         statTabPage(),
-        Container(color: Colors.green),
-        Container(color: Colors.blue)
+        PokemonEvolutionTab(pokemon: widget.pokemon, screenUtil: widget.screenUtil,),
+        PokemonMovesTab(pokemon: widget.pokemon, screenUtil: widget.screenUtil,),
       ]),
     );
   }
@@ -208,7 +211,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                 height: statBarHeight,
                 width: statBarWidth,
                 decoration: BoxDecoration(
-                    gradient: pokemonStatBarGradient,
+                    // gradient: pokemonStatBarGradient,
+                    color: pokemonPageUltility().pokemonColor(),
                     borderRadius:
                         BorderRadius.circular(widget.screenUtil.setHeight(4))),
               ),
@@ -389,7 +393,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
           children: <Widget>[
             Container(
               child: Text(
-                (100 * widget.pokemon.genderRate / 8).toStringAsPrecision(3) +
+                (100 * widget.pokemon.genderRate.abs() / 8).toStringAsPrecision(3) +
                     '%',
                 style: TextStyle(
                     color: Color(0xFFCE71E1),
@@ -401,7 +405,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
             ),
             Container(
               child: Text(
-                (700 * widget.pokemon.genderRate / 8).toStringAsPrecision(3) +
+                (700 * widget.pokemon.genderRate.abs() / 8).toStringAsPrecision(3) +
                     '%',
                 style: TextStyle(
                     color: Color(0xFF80B6F4),
@@ -423,7 +427,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
         child: CircularPercentIndicator(
           radius: widget.screenUtil.setWidth(37),
           lineWidth: 3.5,
-          percent: (widget.pokemon.genderRate / 8),
+          percent: (widget.pokemon.genderRate.abs() / 8),
           center: Image.asset(
             'assets/img/gender_ring.png',
             width: widget.screenUtil.setWidth(18),
@@ -434,6 +438,20 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
         ),
       );
     }
+        List<Widget> genderFinalContent(){
+          print(widget.pokemon.genderRate.abs());
+      if(widget.pokemon.genderRate == -1){
+        print("gender Rate is negative");
+        return [Image.asset(
+            'assets/img/gender_ring.png',
+            width: widget.screenUtil.setWidth(30),
+            height: widget.screenUtil.setHeight(30),
+          )];
+      }
+      else{
+        return [genderColumn(), genderPie()];
+      }
+    }
 
     return subSectionPanel(
         isLastSubSection: true,
@@ -441,7 +459,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[genderColumn(), genderPie()],
+          children: genderFinalContent(),
         ));
   }
 
@@ -484,7 +502,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       Widget captureRateText() {
         return Container(
           child: Text(
-            widget.pokemon.captureRate.toString() + '%',
+            (100* widget.pokemon.captureRate/550).toStringAsPrecision(3) + '%',
             style: TextStyle(
                 color: Color(0xFF80B6F4),
                 fontFamily: "Avenir-Book",
@@ -502,7 +520,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
           child: CircularPercentIndicator(
             radius: widget.screenUtil.setWidth(37),
             lineWidth: 3.5,
-            percent: (widget.pokemon.genderRate / 8),
+            percent: (widget.pokemon.captureRate/ 550),
             center: Image.asset(
               'assets/img/capture_pokeball.png',
               width: widget.screenUtil.setWidth(18),
@@ -540,7 +558,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
     Widget spriteSubSection({String header, String url}) {
       return Container(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
             child: Text(
@@ -556,23 +574,29 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
           Container(
               child: Image.network(url,
                   scale: 0.01,
+                  
                   height: widget.screenUtil.setHeight(sectionWidth / 2),
                   filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover))
+                  fit: BoxFit.fitWidth))
         ],
       ));
     }
 
-    print(widget.pokemon.sprites.frontUrl);
+    String normalUrl = "https://img.pokemondb.net/sprites/x-y/normal/" +
+        widget.pokemon.name.trim() +
+        ".png";
+    String shinyUrl = "https://img.pokemondb.net/sprites/x-y/shiny/" +
+        widget.pokemon.name.trim() +
+        ".png";
     return sectionPanel(
       sectionHeader: "Sprites",
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           spriteSubSection(
-              header: 'Normal', url: widget.pokemon.sprites.frontUrl),
+              header: 'Normal', url: normalUrl),
           spriteSubSection(
-              header: 'Shiny', url: widget.pokemon.sprites.shinyUrl),
+              header: 'Shiny', url: shinyUrl),
         ],
       ),
     );
