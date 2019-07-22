@@ -1,5 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon.dart';
+import 'package:simple_animations/simple_animations.dart';
+
+class PokemonPageUltility {
+  final Pokemon pokemon;
+
+  String getPrimaryType() =>
+      pokemon.types.firstWhere((type) => type.slot == 1).typeName;
+
+  Gradient pokemonColorGradient() {
+    return       pokemonColorsGradient[getPrimaryType().toLowerCase()];
+  }
+  Color pokemonColor() => pokemonColors[getPrimaryType().toLowerCase()];
+
+  Gradient pokemonStatGradient() =>
+      pokemonStatsGradient[getPrimaryType().toLowerCase()];
+
+  String getPokemonTypeDirectory() {
+    String baseDirectory = 'assets/img/tag/';
+    return baseDirectory + getPrimaryType() + '.png';
+  }
+
+  PokemonPageUltility(this.pokemon);
+}
 
 Map<String, Gradient> pokemonStatsGradient = {
   "grass": LinearGradient(
@@ -246,7 +269,6 @@ Map<String, Color> pokemonColors = {
   "psychic": Color(0xFFF87C7A),
   "rock": Color(0xFFCEC18C),
   "steel": Color(0xFF5596A4),
-  
 };
 
 Map<String, String> pokemonStatTypesMap = {
@@ -258,25 +280,35 @@ Map<String, String> pokemonStatTypesMap = {
   "speed": "SPD",
 };
 
-class PokemonPageUltility {
-  final Pokemon pokemon;
-
-  String getPrimaryType() =>
-      pokemon.types.firstWhere((type) => type.slot == 1).typeName;
-
-  Gradient pokemonColorGradient() =>
-      pokemonColorsGradient[getPrimaryType().toLowerCase()];
-  Color pokemonColor() => pokemonColors[getPrimaryType().toLowerCase()];
-
-  Gradient pokemonStatGradient() =>
-      pokemonStatsGradient[getPrimaryType().toLowerCase()];
-
-  String getPokemonTypeDirectory() {
-    String baseDirectory = 'assets/img/tag/';
-    return baseDirectory + getPrimaryType() + '.png';
+class PokeballLoading extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: buildAnimation());
   }
 
-  PokemonPageUltility(this.pokemon);
+  final tween = MultiTrackTween([
+    Track("rotation").add(Duration(seconds: 1), Tween(begin: 0.0, end: 0.2),
+        curve: Curves.bounceInOut)
+  ]);
+
+  Widget buildAnimation() {
+    return ControlledAnimation(
+      playback: Playback.LOOP,
+      duration: tween.duration,
+      tween: tween,
+      builder: (context, animation) {
+        return Transform.rotate(
+          angle: animation["rotation"],
+          child: Container(
+              child: Image.asset(
+            "assets/img/pokeball_img_load.png",
+            width: 50,
+            height: 50,
+          )),
+        );
+      },
+    );
+  }
 }
 
 String upperCaseEveryWords(String inputText) {

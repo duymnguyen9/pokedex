@@ -1,12 +1,11 @@
 //Flutter Package
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 //Addition Package
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
-//import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
@@ -14,11 +13,12 @@ import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_evolution_tab.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_moves_tab.dart';
 
+const double sectionWidth = 345;
+const double subSectionWidth = sectionWidth / 3;
 
 class PokemonTabPanel extends StatefulWidget {
-  PokemonTabPanel({Key key, this.pokemon, this.screenUtil}) : super(key: key);
+  PokemonTabPanel({Key key, this.pokemon}) : super(key: key);
   final Pokemon pokemon;
-  final ScreenUtil screenUtil;
 
   _PokemonTabPanelState createState() => _PokemonTabPanelState();
 }
@@ -30,8 +30,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
   PokemonPageUltility pokemonPageUltility() =>
       PokemonPageUltility(widget.pokemon);
 
-  static const double sectionWidth = 345;
-  static const double subSectionWidth = sectionWidth / 3;
+
 
   @override
   void initState() {
@@ -48,46 +47,57 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[tabBar(), tabBarPages()],
-      ),
-    );
+    double defaultScreenWidth = 375.0;
+    double defaultScreenHeight = 812.0;
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+    // return SliverStickyHeader(
+    //   header: tabBar(),
+    //   sliver: SliverList(
+    //       delegate: SliverChildListDelegate([
+    //     tabBarPages(),
+    //   ])),
+    // );
   }
 
   Widget tabBar() {
     BoxDecoration tabBarIndicatorBoxDecoration = BoxDecoration(
       color: pokemonPageUltility().pokemonColor(),
-      borderRadius: BorderRadius.circular(widget.screenUtil.setWidth(22.5)),
+      borderRadius:
+          BorderRadius.circular(ScreenUtil.getInstance().setWidth(22.5)),
       // border: Border.all(
-      //     width: widget.screenUtil.setWidth(1), color: const Color(0XFF979797)),
+      //     width: ScreenUtil.getInstance().setWidth(1), color: const Color(0XFF979797)),
       boxShadow: [
         BoxShadow(
             color: Color(0XB3559EDF),
-            blurRadius: widget.screenUtil.setWidth(10))
+            blurRadius: ScreenUtil.getInstance().setWidth(10))
       ],
     );
-    double indicatorHeight = widget.screenUtil.setHeight(45.0);
-    double indicatorWidth = widget.screenUtil.setWidth(115.0);
+    double indicatorHeight = ScreenUtil.getInstance().setHeight(45.0);
+    double indicatorWidth = ScreenUtil.getInstance().setWidth(115.0);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
-      height: indicatorHeight,
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      height: indicatorHeight + 20,
       width: indicatorWidth * 3,
+      color: Color(0xFFFAFAFA),
       child: TabBar(
         controller: tabController,
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: tabBarIndicatorBoxDecoration,
         labelStyle: TextStyle(
           fontFamily: 'Avenir-Medium',
-          fontSize: widget.screenUtil.setSp(13),
+          fontSize: ScreenUtil.getInstance().setSp(13),
           color: Colors.white,
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelColor: pokemonPageUltility().pokemonColor(),
         unselectedLabelStyle: TextStyle(
           fontFamily: 'Avenir-Medium',
-          fontSize: widget.screenUtil.setSp(13),
+          fontSize: ScreenUtil.getInstance().setSp(13),
           color: pokemonPageUltility().pokemonColor(),
           fontWeight: FontWeight.w500,
         ),
@@ -114,11 +124,18 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
   Widget tabBarPages() {
     return Container(
+      color: Color(0xFFFAFAFA),
       height: 1400,
       child: TabBarView(controller: tabController, children: <Widget>[
         statTabPage(),
-        PokemonEvolutionTab(pokemon: widget.pokemon, screenUtil: widget.screenUtil,),
-        PokemonMovesTab(pokemon: widget.pokemon, screenUtil: widget.screenUtil,),
+        PokemonEvolutionTab(
+          pokemon: widget.pokemon,
+          screenUtil: ScreenUtil.getInstance(),
+        ),
+        PokemonMovesTab(
+          pokemon: widget.pokemon,
+          screenUtil: ScreenUtil.getInstance(),
+        ),
       ]),
     );
   }
@@ -148,8 +165,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
     //List <Widget> pokemonStatsList = widget.pokemon.stats.map((eachStat)=>pokemonStatRow(eachStat)).toList();
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, widget.screenUtil.setHeight(15), 0,
-          widget.screenUtil.setHeight(30)),
+      margin: EdgeInsets.fromLTRB(0, ScreenUtil.getInstance().setHeight(15), 0,
+          ScreenUtil.getInstance().setHeight(30)),
       child: Column(
         children: pokemonStatsList,
       ),
@@ -157,17 +174,15 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
   }
 
   Widget pokemonStatRow(PokemonStat pokemonStat) {
-    double statBarHeight = widget.screenUtil.setHeight(8);
-    double fullBarWidth = widget.screenUtil.setWidth(240);
+    double statBarHeight = ScreenUtil.getInstance().setHeight(8);
+    double fullBarWidth = ScreenUtil.getInstance().setWidth(240);
     double statBarWidth =
-        widget.screenUtil.setWidth((pokemonStat.value / 100) * 240.0);
-    double statTextWidth = widget.screenUtil.setWidth(40);
-    Gradient pokemonStatBarGradient =
-        pokemonPageUltility().pokemonStatGradient();
+        ScreenUtil.getInstance().setWidth((pokemonStat.value / 100) * 240.0);
+    double statTextWidth = ScreenUtil.getInstance().setWidth(40);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(
-          0, widget.screenUtil.setHeight(5), 0, widget.screenUtil.setHeight(5)),
+      margin: EdgeInsets.fromLTRB(0, ScreenUtil.getInstance().setHeight(5), 0,
+          ScreenUtil.getInstance().setHeight(5)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -179,7 +194,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
               style: TextStyle(
                   color: pokemonPageUltility().pokemonColor(),
                   fontFamily: "Avenir-Heavy",
-                  fontSize: widget.screenUtil.setSp(14),
+                  fontSize: ScreenUtil.getInstance().setSp(14),
                   fontWeight: FontWeight.w600),
             ),
           ),
@@ -190,7 +205,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
               style: TextStyle(
                   color: Color(0XFF666666),
                   fontFamily: "Avenir-Book",
-                  fontSize: widget.screenUtil.setSp(14)),
+                  fontSize: ScreenUtil.getInstance().setSp(14)),
             ),
           ),
           Container(
@@ -202,8 +217,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                 width: fullBarWidth,
                 decoration: BoxDecoration(
                     color: Color(0xFFF0F0F0),
-                    borderRadius:
-                        BorderRadius.circular(widget.screenUtil.setHeight(4))),
+                    borderRadius: BorderRadius.circular(
+                        ScreenUtil.getInstance().setHeight(4))),
               ),
 
               //statBar
@@ -213,8 +228,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                 decoration: BoxDecoration(
                     // gradient: pokemonStatBarGradient,
                     color: pokemonPageUltility().pokemonColor(),
-                    borderRadius:
-                        BorderRadius.circular(widget.screenUtil.setHeight(4))),
+                    borderRadius: BorderRadius.circular(
+                        ScreenUtil.getInstance().setHeight(4))),
               ),
             ],
           )),
@@ -226,10 +241,10 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
   Widget abilitySection() {
     Widget abilitySeparatorWidget = Container(
         margin: EdgeInsets.fromLTRB(
-            widget.screenUtil.setWidth(25),
-            widget.screenUtil.setHeight(10),
-            widget.screenUtil.setWidth(25),
-            widget.screenUtil.setHeight(10)),
+            ScreenUtil.getInstance().setWidth(25),
+            ScreenUtil.getInstance().setHeight(10),
+            ScreenUtil.getInstance().setWidth(25),
+            ScreenUtil.getInstance().setHeight(10)),
         decoration: BoxDecoration(
             border: Border(
           bottom: BorderSide(width: 0.3, color: Color(0xFFbdbdbd)),
@@ -261,12 +276,12 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       if (isHidden) {
         return Container(
           margin: EdgeInsets.only(
-            left: widget.screenUtil.setWidth(5),
+            left: ScreenUtil.getInstance().setWidth(5),
           ),
           child: Icon(
             Icons.link_off,
             color: pokemonPageUltility().pokemonColor(),
-            size: widget.screenUtil.setWidth(18),
+            size: ScreenUtil.getInstance().setWidth(18),
           ),
         );
       } else {
@@ -276,10 +291,10 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
     return Container(
       margin: EdgeInsets.fromLTRB(
-          widget.screenUtil.setWidth(10),
-          widget.screenUtil.setHeight(10),
-          widget.screenUtil.setWidth(10),
-          widget.screenUtil.setHeight(10)),
+          ScreenUtil.getInstance().setWidth(10),
+          ScreenUtil.getInstance().setHeight(10),
+          ScreenUtil.getInstance().setWidth(10),
+          ScreenUtil.getInstance().setHeight(10)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -292,7 +307,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                       color: pokemonPageUltility().pokemonColor(),
                       fontFamily: "Avenir-Medium",
                       height: 1.3,
-                      fontSize: widget.screenUtil.setSp(16),
+                      fontSize: ScreenUtil.getInstance().setSp(16),
                       fontWeight: FontWeight.w500),
                 ),
                 isHiddenIcon()
@@ -306,7 +321,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                   color: Color(0xFF4F4F4F),
                   fontFamily: "Avenir-Book",
                   height: 1.3,
-                  fontSize: widget.screenUtil.setSp(15),
+                  fontSize: ScreenUtil.getInstance().setSp(15),
                   fontWeight: FontWeight.w300),
             ),
           )
@@ -337,7 +352,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
               color: Color(0xFF4F4F4F),
               fontFamily: "Avenir-Book",
               height: 1.3,
-              fontSize: widget.screenUtil.setSp(15),
+              fontSize: ScreenUtil.getInstance().setSp(15),
               fontWeight: FontWeight.w300),
         ),
       ));
@@ -367,7 +382,7 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
               color: Color(0xFF4F4F4F),
               fontFamily: "Avenir-Book",
               height: 1.3,
-              fontSize: widget.screenUtil.setSp(15),
+              fontSize: ScreenUtil.getInstance().setSp(15),
               fontWeight: FontWeight.w300),
         ),
       );
@@ -387,31 +402,33 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
   Widget genderContent() {
     Widget genderColumn() {
       return Container(
-        width: widget.screenUtil.setWidth(50),
-        height: widget.screenUtil.setHeight(50),
+        width: ScreenUtil.getInstance().setWidth(50),
+        height: ScreenUtil.getInstance().setHeight(50),
         child: Column(
           children: <Widget>[
             Container(
               child: Text(
-                (100 * widget.pokemon.genderRate.abs() / 8).toStringAsPrecision(3) +
+                (100 * widget.pokemon.genderRate.abs() / 8)
+                        .toStringAsPrecision(3) +
                     '%',
                 style: TextStyle(
                     color: Color(0xFFCE71E1),
                     fontFamily: "Avenir-Book",
                     height: 1.3,
-                    fontSize: widget.screenUtil.setSp(15),
+                    fontSize: ScreenUtil.getInstance().setSp(15),
                     fontWeight: FontWeight.w300),
               ),
             ),
             Container(
               child: Text(
-                (700 * widget.pokemon.genderRate.abs() / 8).toStringAsPrecision(3) +
+                (700 * widget.pokemon.genderRate.abs() / 8)
+                        .toStringAsPrecision(3) +
                     '%',
                 style: TextStyle(
                     color: Color(0xFF80B6F4),
                     fontFamily: "Avenir-Book",
                     height: 1.3,
-                    fontSize: widget.screenUtil.setSp(15),
+                    fontSize: ScreenUtil.getInstance().setSp(15),
                     fontWeight: FontWeight.w300),
               ),
             ),
@@ -422,33 +439,35 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
     Widget genderPie() {
       return Container(
-        width: widget.screenUtil.setWidth(40),
-        height: widget.screenUtil.setHeight(43),
+        width: ScreenUtil.getInstance().setWidth(40),
+        height: ScreenUtil.getInstance().setHeight(43),
         child: CircularPercentIndicator(
-          radius: widget.screenUtil.setWidth(37),
+          radius: ScreenUtil.getInstance().setWidth(37),
           lineWidth: 3.5,
           percent: (widget.pokemon.genderRate.abs() / 8),
           center: Image.asset(
             'assets/img/gender_ring.png',
-            width: widget.screenUtil.setWidth(18),
-            height: widget.screenUtil.setHeight(18),
+            width: ScreenUtil.getInstance().setWidth(18),
+            height: ScreenUtil.getInstance().setHeight(18),
           ),
           progressColor: Color(0xFFCE71E1),
           backgroundColor: Color(0xFF80B6F4),
         ),
       );
     }
-        List<Widget> genderFinalContent(){
-          print(widget.pokemon.genderRate.abs());
-      if(widget.pokemon.genderRate == -1){
+
+    List<Widget> genderFinalContent() {
+      print(widget.pokemon.genderRate.abs());
+      if (widget.pokemon.genderRate == -1) {
         print("gender Rate is negative");
-        return [Image.asset(
+        return [
+          Image.asset(
             'assets/img/gender_ring.png',
-            width: widget.screenUtil.setWidth(30),
-            height: widget.screenUtil.setHeight(30),
-          )];
-      }
-      else{
+            width: ScreenUtil.getInstance().setWidth(30),
+            height: ScreenUtil.getInstance().setHeight(30),
+          )
+        ];
+      } else {
         return [genderColumn(), genderPie()];
       }
     }
@@ -468,14 +487,15 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       return subSectionPanel(
           subSectionHeader: "Habitat",
           child: Container(
-            margin: EdgeInsets.only(bottom: widget.screenUtil.setHeight(10)),
+            margin:
+                EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
             child: Text(
               widget.pokemon.habitat,
               style: TextStyle(
                   color: Color(0xFF4F4F4F),
                   fontFamily: "Avenir-Book",
                   height: 1.3,
-                  fontSize: widget.screenUtil.setSp(15),
+                  fontSize: ScreenUtil.getInstance().setSp(15),
                   fontWeight: FontWeight.w300),
             ),
           ));
@@ -485,14 +505,15 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       return subSectionPanel(
           subSectionHeader: "Generation",
           child: Container(
-            margin: EdgeInsets.only(bottom: widget.screenUtil.setHeight(10)),
+            margin:
+                EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
             child: Text(
               widget.pokemon.generation,
               style: TextStyle(
                   color: Color(0xFF4F4F4F),
                   fontFamily: "Avenir-Book",
                   height: 1.3,
-                  fontSize: widget.screenUtil.setSp(15),
+                  fontSize: ScreenUtil.getInstance().setSp(15),
                   fontWeight: FontWeight.w300),
             ),
           ));
@@ -502,12 +523,13 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       Widget captureRateText() {
         return Container(
           child: Text(
-            (100* widget.pokemon.captureRate/550).toStringAsPrecision(3) + '%',
+            (100 * widget.pokemon.captureRate / 550).toStringAsPrecision(3) +
+                '%',
             style: TextStyle(
                 color: Color(0xFF80B6F4),
                 fontFamily: "Avenir-Book",
                 height: 1.3,
-                fontSize: widget.screenUtil.setSp(15),
+                fontSize: ScreenUtil.getInstance().setSp(15),
                 fontWeight: FontWeight.w300),
           ),
         );
@@ -515,16 +537,16 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
 
       Widget captureRatePie() {
         return Container(
-          width: widget.screenUtil.setWidth(40),
-          height: widget.screenUtil.setHeight(43),
+          width: ScreenUtil.getInstance().setWidth(40),
+          height: ScreenUtil.getInstance().setHeight(43),
           child: CircularPercentIndicator(
-            radius: widget.screenUtil.setWidth(37),
+            radius: ScreenUtil.getInstance().setWidth(37),
             lineWidth: 3.5,
-            percent: (widget.pokemon.captureRate/ 550),
+            percent: (widget.pokemon.captureRate / 550),
             center: Image.asset(
               'assets/img/capture_pokeball.png',
-              width: widget.screenUtil.setWidth(18),
-              height: widget.screenUtil.setHeight(18),
+              width: ScreenUtil.getInstance().setWidth(18),
+              height: ScreenUtil.getInstance().setHeight(18),
             ),
             progressColor: pokemonPageUltility().pokemonColor(),
             backgroundColor: Color(0xFFE6E6E6),
@@ -567,17 +589,18 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
                   color: pokemonPageUltility().pokemonColor(),
                   fontFamily: "Avenir-Medium",
                   height: 1.3,
-                  fontSize: widget.screenUtil.setSp(16),
+                  fontSize: ScreenUtil.getInstance().setSp(16),
                   fontWeight: FontWeight.w400),
             ),
           ),
           Container(
-              child: Image.network(url,
-                  scale: 0.01,
-                  
-                  height: widget.screenUtil.setHeight(sectionWidth / 2),
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.fitWidth))
+            child: CachedNetworkImage(
+                imageUrl: url,
+                width: ScreenUtil.getInstance().setHeight(sectionWidth / 2),
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fit: BoxFit.fitWidth),
+          ),
         ],
       ));
     }
@@ -593,10 +616,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          spriteSubSection(
-              header: 'Normal', url: normalUrl),
-          spriteSubSection(
-              header: 'Shiny', url: shinyUrl),
+          spriteSubSection(header: 'Normal', url: normalUrl),
+          spriteSubSection(header: 'Shiny', url: shinyUrl),
         ],
       ),
     );
@@ -606,19 +627,22 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
       {String sectionHeader, Widget child, bool haveHeader = true}) {
     Widget header() {
       if (haveHeader) {
-        return sectionTitle(sectionHeader);
+        return new SectionTitle(
+          title: sectionHeader,
+          pokemon: widget.pokemon,
+        );
       } else {
         return Container();
       }
     }
 
     return Container(
-        width: widget.screenUtil.setWidth(sectionWidth),
+        width: ScreenUtil.getInstance().setWidth(sectionWidth),
         margin: EdgeInsets.fromLTRB(
-            widget.screenUtil.setWidth(0),
-            widget.screenUtil.setHeight(15),
-            widget.screenUtil.setWidth(0),
-            widget.screenUtil.setHeight(15)),
+            ScreenUtil.getInstance().setWidth(0),
+            ScreenUtil.getInstance().setHeight(15),
+            ScreenUtil.getInstance().setWidth(0),
+            ScreenUtil.getInstance().setHeight(15)),
         child: Column(
           children: <Widget>[header(), child],
         ));
@@ -629,14 +653,14 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
     //subSectionTitle Widget
     Widget header() {
       return Container(
-        margin: EdgeInsets.only(bottom: widget.screenUtil.setHeight(10)),
+        margin: EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
         child: Text(
           subSectionHeader,
           style: TextStyle(
-              color: pokemonPageUltility().pokemonColor(),
+              color: Colors.red,
               fontFamily: "Avenir-Medium",
               height: 1.3,
-              fontSize: widget.screenUtil.setSp(16),
+              fontSize: ScreenUtil.getInstance().setSp(16),
               fontWeight: FontWeight.w400),
         ),
       );
@@ -654,8 +678,8 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
     }
 
     return Container(
-      width: widget.screenUtil.setWidth(subSectionWidth),
-      height: widget.screenUtil.setHeight(85),
+      width: ScreenUtil.getInstance().setWidth(subSectionWidth),
+      height: ScreenUtil.getInstance().setHeight(85),
       decoration: subSectionBoxDecoration(),
       child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -667,11 +691,24 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
           ]),
     );
   }
+}
 
-  Widget sectionTitle(String title) {
+class SectionTitle extends StatelessWidget {
+  const SectionTitle({
+    Key key,
+    @required this.title,
+    this.pokemon,
+  }) : super(key: key);
+
+  final String title;
+  final Pokemon pokemon;
+  PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
+
+  @override
+  Widget build(BuildContext context) {
     Color pokemonColor = pokemonPageUltility().pokemonColor();
     return Container(
-      height: widget.screenUtil.setHeight(60),
+      height: ScreenUtil.getInstance().setHeight(60),
       margin: EdgeInsets.only(bottom: 10),
       child: Center(
         child: Text(
@@ -679,9 +716,131 @@ class _PokemonTabPanelState extends State<PokemonTabPanel>
           style: TextStyle(
               color: pokemonColor,
               fontFamily: 'Avenir-Book',
-              fontSize: widget.screenUtil.setSp(20)),
+              fontSize: ScreenUtil.getInstance().setSp(20)),
         ),
       ),
     );
   }
 }
+
+class SubSectionWidget extends StatelessWidget {
+  const SubSectionWidget(
+      {Key key,
+      this.subSectionHeader,
+      this.child,
+      this.isLastSubSection = false})
+      : super(key: key);
+  final String subSectionHeader;
+  final Widget child;
+  final bool isLastSubSection;
+
+  @override
+  Widget build(BuildContext context) {
+    //subSectionTitle Widget
+    Widget header() {
+      return Container(
+        margin: EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
+        child: Text(
+          subSectionHeader,
+          style: TextStyle(
+              color: Colors.red,
+              fontFamily: "Avenir-Medium",
+              height: 1.3,
+              fontSize: ScreenUtil.getInstance().setSp(16),
+              fontWeight: FontWeight.w400),
+        ),
+      );
+    }
+
+    BoxDecoration subSectionBoxDecoration() {
+      if (isLastSubSection) {
+        return BoxDecoration();
+      } else {
+        return BoxDecoration(
+            border: Border(
+          right: BorderSide(width: 0.3, color: Color(0xFFbdbdbd)),
+        ));
+      }
+    }
+
+    return Container(
+      width: ScreenUtil.getInstance().setWidth(subSectionWidth),
+      height: ScreenUtil.getInstance().setHeight(85),
+      decoration: subSectionBoxDecoration(),
+      child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            header(),
+            child,
+          ]),
+    );
+  }
+}
+
+//NEW SHEET
+class PokemonPageTabBarView extends StatelessWidget {
+  const PokemonPageTabBarView({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBarView(
+          children: <Widget>[
+            TabPageViewContainer(
+              tabKey: "STATS",
+              pageContent: <Widget>[
+
+              ],
+            ),
+                        TabPageViewContainer(
+              tabKey: "EVOLUTIONS",
+              pageContent: <Widget>[
+
+              ],
+            ),
+                        TabPageViewContainer(
+              tabKey: "MOVES",
+              pageContent: <Widget>[
+
+              ],
+            ),
+          ],
+        );
+  }
+}
+
+
+
+
+
+class TabPageViewContainer extends StatelessWidget {
+  const TabPageViewContainer(
+      {Key key, @required this.tabKey, @required this.pageContent})
+      : super(key: key);
+  final String tabKey;
+  final List<Widget> pageContent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (BuildContext context) {
+        return CustomScrollView(
+          key: PageStorageKey<String>(tabKey),
+          slivers: <Widget>[
+            SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.all(8.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(pageContent),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+}
+

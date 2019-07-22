@@ -6,12 +6,12 @@ TODOS:
     ✔ Evolutions Panel @done(19-07-14 11:19)
     ✔ Moves Panel @done(19-07-14 11:19)
     ☐ Animation
+      ☐ list to individual transition
+      ☐ CustomScrollView
       ☐ pokemon image
       ☐ statbar
       ☐ background gradient
       ☐ sheet pullup animation
   Pokemon List Page:
-    ☐ pokemon List page template
-    ☐ 
-  Pokemon List Page:
     ☐ use Moor and Provider to create store pokemon data
+    ☐ pokemon List page template

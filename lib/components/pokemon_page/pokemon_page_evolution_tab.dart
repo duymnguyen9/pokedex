@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 
@@ -86,11 +89,13 @@ class PokemonEvolutionTab extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Image.network(
-              imgUrl,
-              width: screenUtil.setWidth(90),
+            CachedNetworkImage(
+        imageUrl:imgUrl,
+                      width: screenUtil.setWidth(90),
               height: screenUtil.setHeight(90),
-            ),
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+     ),
             Container(
               height: screenUtil.setHeight(15),
             ),
