@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
 
 class PokemonPageHeader extends StatefulWidget {
   const PokemonPageHeader({Key key, this.pokemon}) : super(key: key);
@@ -19,21 +17,6 @@ class PokemonPageHeader extends StatefulWidget {
 
 class _PokemonPageHeaderState extends State<PokemonPageHeader> {
   PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(widget.pokemon);
-
-    static final double _initialToolbarHeight = 300;
-  static final double _maxSizeFactor = 1.3; // image max size will 130%
-  static final double _transformSpeed = 0.001; // 0.1 very fast,   0.001 slow
-
-  ScrollController _controller;
-  double _factor = 1;
-  double _expandedToolbarHeight = _initialToolbarHeight;
-
-  @override
-  void initState(){
-    _controller = ScrollController();
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -177,17 +160,6 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
       } else if (opacityValue > 0.7 &&
           (1.1 - shrinkOffset * 3 / expandedHeight) > 0) {
         return (1.1 - shrinkOffset * 3 / expandedHeight);
-      } else
-        return 0;
-    }
-
-    double opacityHeaderControlTitle() {
-      double opacityValue = (1 - shrinkOffset / expandedHeight);
-      if (opacityValue > 0.99) {
-        return 1;
-      } else if (opacityValue > 0.7 &&
-          (1 - shrinkOffset * 4 / expandedHeight) > 0) {
-        return (1 - shrinkOffset * 4 / expandedHeight);
       } else
         return 0;
     }

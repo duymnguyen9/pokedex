@@ -10,7 +10,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
 
 class PokemonPage extends StatelessWidget {
   const PokemonPage({Key key, this.pokemon}) : super(key: key);
@@ -76,9 +75,7 @@ class PokemonPage extends StatelessWidget {
         ),
         pokemonTypePanel(),
         pokemonDescriptionPanel(),
-        PokemonTabPanel(
-          pokemon: pokemon,
-        ),
+
       ],
     );
   }

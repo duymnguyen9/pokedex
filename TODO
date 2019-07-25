@@ -5,6 +5,8 @@ TODOS:
     ✔ Breeding Panel @done(19-07-12 17:33)
     ✔ Evolutions Panel @done(19-07-14 11:19)
     ✔ Moves Panel @done(19-07-14 11:19)
+    ☐ Move the Loading Screen to its own separate page
+    ☐ Convert FutureBuilder to stateful so you have more control
     ☐ Animation
       ☐ list to individual transition
       ☐ CustomScrollView

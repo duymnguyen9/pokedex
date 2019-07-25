@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 
 //Addition Package
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-//import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
 import 'package:pokedex/screens/pokemon_page/pokemon_page_header.dart';
 import 'package:simple_animations/simple_animations.dart';
+
+
 
 const double pokemonSheetTopPosition = 222;
 
@@ -63,7 +62,7 @@ class AnimatedBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     MultiTrackTween tween = MultiTrackTween([
     Track("sheetPosition").add(
-        Duration(milliseconds: 250),
+        Duration(milliseconds: 300),
         Tween(begin: screenUtil.setHeight(screenUtil.height), end: screenUtil.setHeight(pokemonSheetTopPosition)),
         curve: Curves.easeIn)
         
