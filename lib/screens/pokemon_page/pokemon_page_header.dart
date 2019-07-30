@@ -7,7 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_animation.dart';
+import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
 const double pokemonSheetTopPosition = 222;
 
@@ -36,6 +36,7 @@ class _PokemonPageHeaderState extends State<PokemonPageHeader> {
     return DefaultTabController(
       length: 3,
       child: NestedScrollView(
+        physics: BouncingScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverOverlapAbsorber(
@@ -372,17 +373,24 @@ class PokemonTypePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String pokemonTypeDirectory =
-        pokemonPageUltility().getPokemonTypeDirectory();
+    List<Widget> typeList= [];
+    for(PokemonType type in pokemon.types){
+    String path = 'assets/img/tag/'+ type.typeName + '.png';
+      typeList.add(
+        Image.asset(
+          path,
+          height: ScreenUtil.getInstance().setHeight(40),
+        )
+      );
+    }
     return Container(
         height: ScreenUtil.getInstance().setHeight(50),
         width: MediaQuery.of(context).size.width,
-        child: Center(
-            child: Image.asset(
-          pokemonTypeDirectory,
-          width: ScreenUtil.getInstance().setWidth(120),
-          height: ScreenUtil.getInstance().setHeight(40),
-        )));
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: typeList, 
+          ));
   }
 }
 

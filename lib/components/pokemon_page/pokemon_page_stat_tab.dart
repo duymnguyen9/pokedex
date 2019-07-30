@@ -12,6 +12,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/components/animation/pokemon_page_animation.dart';
+
 
 class PokemonPageStatTab extends StatelessWidget {
   const PokemonPageStatTab(
@@ -22,12 +24,8 @@ class PokemonPageStatTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    screenSizeStatus("PokemonPageStatTab", context);
-    return Container(
-      color: Color(0xFFFAFAFA),
-      child: TabPageViewContainer(
-        tabKey: "STATS",
-        pageContent: <Widget>[
+    // screenSizeStatus("PokemonPageStatTab", context);
+    List<Widget> statSectionLists = [
           PokemonStatSection(
             pokemon: pokemon,
             pokemonColor: pokemonColor,
@@ -44,7 +42,24 @@ class PokemonPageStatTab extends StatelessWidget {
             pokemon: pokemon,
             pokemonColor: pokemonColor,
           )
-        ],
+        ];
+        List<Widget> statSectionListsOutput=[];
+        double delayCount = 0.5;
+        for(var widget in statSectionLists){
+          statSectionListsOutput.add(
+            FadeIn(delay: 1+delayCount,
+            child: widget)
+          );
+          delayCount +=1;
+        }
+        statSectionListsOutput.add(BottomTabRoundedCorner(pokemonColor: pokemonColor,));
+    return Container(
+      color: Color(0xFFFAFAFA),
+      child: TabPageViewContainer(
+        tabKey: "STATS",
+                pageContent: SliverList(
+                delegate: SliverChildListDelegate(statSectionListsOutput),
+              )
       ),
     );
   }
@@ -59,13 +74,19 @@ class PokemonStatSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    screenSizeStatus("PokemonStatSection", context);
     List<Widget> pokemonStatsList = [];
+    double delaycount = 0.5;
     for (var key in pokemonStatTypesMap.keys) {
-      pokemonStatsList.add(PokemonStatRow(
-          pokemonStat:
-              pokemon.stats.firstWhere((stat) => stat.name.trim() == key),
-          pokemonColor: pokemonColor));
+      pokemonStatsList.add(
+        FadeIn(
+          delay: 1+ delaycount,
+                  child: PokemonStatRow(
+                    pokemon: pokemon,
+            pokemonStat:
+                pokemon.stats.firstWhere((stat) => stat.name.trim() == key),
+            pokemonColor: pokemonColor),
+        ));
+        delaycount+=0.5;
     }
 
     return Container(
@@ -80,18 +101,20 @@ class PokemonStatSection extends StatelessWidget {
 
 class PokemonStatRow extends StatelessWidget {
   const PokemonStatRow(
-      {Key key, @required this.pokemonStat, @required this.pokemonColor})
+      {Key key, @required this.pokemonStat, @required this.pokemonColor,@required this.pokemon})
       : super(key: key);
   final PokemonStat pokemonStat;
   final Color pokemonColor;
+  final Pokemon pokemon;
+    PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
+
 
   @override
   Widget build(BuildContext context) {
-    screenSizeStatus("PokemonStatSection", context);
     double statBarHeight = ScreenUtil.getInstance().setHeight(8);
     double fullBarWidth = ScreenUtil.getInstance().setWidth(240);
     double statBarWidth =
-        ScreenUtil.getInstance().setWidth((pokemonStat.value / 255) * 240.0);
+        ScreenUtil.getInstance().setWidth((pokemonStat.value / 240) * 240.0);
     double statTextWidth = ScreenUtil.getInstance().setWidth(40);
 
     return Container(
@@ -136,15 +159,21 @@ class PokemonStatRow extends StatelessWidget {
               ),
 
               //statBar
-              Container(
-                height: statBarHeight,
-                width: statBarWidth,
-                decoration: BoxDecoration(
-                    // gradient: pokemonStatBarGradient,
-                    color: pokemonColor,
-                    borderRadius: BorderRadius.circular(
-                        ScreenUtil.getInstance().setHeight(4))),
-              ),
+              // Container(
+              //   height: statBarHeight,
+              //   width: statBarWidth,
+              //   decoration: BoxDecoration(
+              //       // gradient: pokemonStatBarGradient,
+              //       color: pokemonColor,
+              //       borderRadius: BorderRadius.circular(
+              //           ScreenUtil.getInstance().setHeight(4))),
+              // )
+              StatBarPanelAnimation(
+                statValue: statBarWidth,
+                pokemonColor: pokemonColor,
+                pokemonGradient: pokemonPageUltility().pokemonColorGradient(),
+                child: Container(),
+              )
             ],
           )),
         ],
@@ -162,7 +191,7 @@ class PokemonAbilitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    screenSizeStatus("PokemonStatSection", context);
+    // screenSizeStatus("PokemonStatSection", context);
 
     List<PokemonAbility> pokemonAbilitiesSorted = pokemon.abilities;
     pokemonAbilitiesSorted.sort((a, b) => a.slot.compareTo(b.slot));
@@ -407,9 +436,7 @@ class GenderContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> genderFinalContent() {
-      print(pokemon.genderRate.abs());
       if (pokemon.genderRate == -1) {
-        print("gender Rate is negative");
         return [
           Image.asset(
             'assets/img/gender_ring.png',

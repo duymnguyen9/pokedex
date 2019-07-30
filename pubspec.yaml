@@ -39,6 +39,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^3.0.0
+  flutter_launcher_icons: "^0.7.0"
 
 
 # For information on the generic Dart part of this file, see the
@@ -54,6 +55,10 @@ flutter:
     - assets/img/arrow.png
     - assets/img/pokeball_loading.gif
     - assets/img/pokeball_img_load.png
+    - assets/img/pokeball2.png
+    - assets/launcher/foreground.png
+    - assets/img/pokemon_logo.png
+    - assets/img/ash.png
 
 
   # The following line ensures that the Material Icons font is
@@ -85,6 +90,10 @@ fonts:
       - asset: assets/fonts/Avenir-Heavy.ttc
       - family: Avenir-Medium
       - asset: assets/fonts/Avenir-Medium.ttc
+      - family: Pokemon Solid
+      - asset: assets/fonts/PokemonSolid.ttf
+      - family: Pokemon Hollow
+      - asset: assets/fonts/PokemonHollow.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
@@ -99,3 +108,10 @@ fonts:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/foreground.png"
+  image_path_android: "assets/launcher/foreground.png"
+  adaptive_icon_background: "assets/launcher/foreground.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"

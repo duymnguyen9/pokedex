@@ -32,6 +32,8 @@ class PokemonPage extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
     ScreenUtil screenUtil = ScreenUtil.instance;
+
+    print(pokemon.types[0].typeName);
     return Material(
       elevation: 5,
         child: Stack(
@@ -62,9 +64,9 @@ class AnimatedBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     MultiTrackTween tween = MultiTrackTween([
     Track("sheetPosition").add(
-        Duration(milliseconds: 300),
+        Duration(milliseconds: 500),
         Tween(begin: screenUtil.setHeight(screenUtil.height), end: screenUtil.setHeight(pokemonSheetTopPosition)),
-        curve: Curves.easeIn)
+        curve: Curves.easeOut)
         
   ]);
     return ControlledAnimation(

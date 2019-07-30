@@ -8,6 +8,8 @@ class PokemonService {
   final int pokemonID;
   PokemonService({this.pokemonID});
 
+
+
   Future<String> fetchAbilities(url) async {
     List<String> versionGroup = [
       'ultra-sun-ultra-moon',

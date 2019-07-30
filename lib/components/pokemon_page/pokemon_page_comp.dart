@@ -3,29 +3,61 @@ import 'package:pokedex/models/pokemon.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+class BottomTabRoundedCorner extends StatelessWidget {
+  const BottomTabRoundedCorner({Key key, this.pokemonColor}) : super(key: key);
+  final Color pokemonColor;
 
-  void screenSizeStatus(String widgetname, BuildContext context){
-    print(widgetname);
-    if(ScreenUtil.getInstance().height  == 812.0){
-      print("screenSizeStatus: matches!");
-    }
-    else{
-    print("screen height is " + MediaQuery.of(context).size.height.toString());
-    print("iphoneX height supposed to be 812: " + ScreenUtil.getInstance().height.toString());
-    print("If this is not iphone X, value of 25 is: " + (ScreenUtil.getInstance().setWidth(25)).toString());
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ScreenUtil.getInstance().setHeight(70),
+      width: MediaQuery.of(context).size.width,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: ScreenUtil.getInstance().setHeight(70),
+            width: MediaQuery.of(context).size.width,
+            color: pokemonColor,
+          ),
+          Container(
+            height: ScreenUtil.getInstance().setHeight(47),
+            width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                color: Color(0xFFFAFAFA),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(ScreenUtil().setHeight(45)),
+                    bottomRight: Radius.circular(ScreenUtil().setHeight(45))))
+            )
+        ],
+      ),
+    );
+  }
 }
 
-  void screenSizeConfiguration(BuildContext context, double screenwidth, double screenHeight){
-    ScreenUtil.instance = ScreenUtil(
-      width: screenwidth,
-      height: screenHeight,
-      allowFontScaling: true,
-    )..init(context);
-    print("default Screen Height: "+ ScreenUtil.getInstance().height.toString());
-    print("actual Screen Height: "+ MediaQuery.of(context).size.height.toString());
+void screenSizeStatus(String widgetname, BuildContext context) {
+  print(widgetname);
+  if (ScreenUtil.getInstance().height == 812.0) {
+    print("screenSizeStatus: matches!");
+  } else {
+    print("screen height is " + MediaQuery.of(context).size.height.toString());
+    print("iphoneX height supposed to be 812: " +
+        ScreenUtil.getInstance().height.toString());
+    print("If this is not iphone X, value of 25 is: " +
+        (ScreenUtil.getInstance().setWidth(25)).toString());
   }
+}
 
+void screenSizeConfiguration(
+    BuildContext context, double screenwidth, double screenHeight) {
+  ScreenUtil.instance = ScreenUtil(
+    width: screenwidth,
+    height: screenHeight,
+    allowFontScaling: true,
+  )..init(context);
+  print("default Screen Height: " + ScreenUtil.getInstance().height.toString());
+  print(
+      "actual Screen Height: " + MediaQuery.of(context).size.height.toString());
+}
 
 class PokemonPageUltility {
   final Pokemon pokemon;
@@ -34,12 +66,11 @@ class PokemonPageUltility {
       pokemon.types.firstWhere((type) => type.slot == 1).typeName;
 
   Gradient pokemonColorGradient() {
-    return       pokemonColorsGradient[getPrimaryType().toLowerCase()];
+    return pokemonColorsGradient[getPrimaryType().toLowerCase()];
   }
+
   Color pokemonColor() => pokemonColors[getPrimaryType().toLowerCase()];
 
-  Gradient pokemonStatGradient() =>
-      pokemonStatsGradient[getPrimaryType().toLowerCase()];
 
   String getPokemonTypeDirectory() {
     String baseDirectory = 'assets/img/tag/';
@@ -49,30 +80,7 @@ class PokemonPageUltility {
   PokemonPageUltility(this.pokemon);
 }
 
-Map<String, Gradient> pokemonStatsGradient = {
-  "grass": LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      stops: [
-        0.0,
-        1.0
-      ],
-      colors: [
-        const Color(0xff5FBC51),
-        const Color(0xff5AC178),
-      ]),
-  "water": LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      stops: [
-        0.1,
-        0.7
-      ],
-      colors: [
-        const Color(0xff6CBDE4),
-        const Color(0xff4A90DD),
-      ]),
-};
+
 
 Map<String, Gradient> pokemonColorsGradient = {
   "grass": LinearGradient(
@@ -152,7 +160,7 @@ Map<String, Gradient> pokemonColorsGradient = {
         const Color(0xffEC8CE5),
         const Color(0xffF3A7E7),
       ]),
-  "fight": LinearGradient(
+  "fighting": LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       stops: [
@@ -283,7 +291,7 @@ Map<String, Color> pokemonColors = {
   "dragon": Color(0xFF5F606D),
   "electric": Color(0xFFEDD53F),
   "fairy": Color(0xFFEF97E6),
-  "fight": Color(0xFFD94256),
+  "fighting": Color(0xFFD94256),
   "fire": Color(0xFFF8A54F),
   "flying": Color(0xFF9BB4E8),
   "ghost": Color(0xFF6970C5),

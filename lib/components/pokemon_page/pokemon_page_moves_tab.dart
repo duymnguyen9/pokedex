@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
 
 class PokemonMovesTab extends StatelessWidget {
@@ -16,7 +17,11 @@ class PokemonMovesTab extends StatelessWidget {
       color: Color(0xFFFAFAFA),
       child: TabPageViewContainer(
         tabKey: "MOVES",
-        pageContent: [MovesSection(pokemon: pokemon)],),);
+
+        pageContent: SliverList(
+                delegate: SliverChildListDelegate([MovesSection(pokemon: pokemon)]),
+              )
+        ),);
   }
 
 }
@@ -28,6 +33,8 @@ class MovesSection extends StatelessWidget {
   }) : super(key: key);
 
   final Pokemon pokemon;
+      PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,25 +51,38 @@ class MovesSection extends StatelessWidget {
     List<PokemonMove> pokemonMovesSorted = pokemon.moves;
     pokemonMovesSorted.sort((a, b) => int.parse(a.levelLearned).compareTo(int.parse(b.levelLearned)));
     List<Widget> movesWidgetList = [];
+    double delayCount= 0.5;
     for (var move in pokemonMovesSorted) {
       if (move.levelLearned !="0") {
-              movesWidgetList.add(new MoveRowWidget(pokemonMove: move));
+              movesWidgetList.add( 
+                FadeIn(delay: 0.5+ delayCount, child: MoveRowWidget(pokemonMove: move)));
       movesWidgetList.add(movesSeparatorWidget);
+      delayCount +=0.5;
       }
-
     }
     movesWidgetList.removeLast();
-    return Container(
-            margin: EdgeInsets.fromLTRB(
-          ScreenUtil.getInstance().setWidth(10),
+
+    return 
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+
+    Container(
+            padding: EdgeInsets.fromLTRB(
+          ScreenUtil.getInstance().setWidth(15),
           ScreenUtil.getInstance().setHeight(0),
-          ScreenUtil.getInstance().setWidth(10),
+          ScreenUtil.getInstance().setWidth(15),
           ScreenUtil.getInstance().setHeight(0)),
       child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: movesWidgetList,
           ),
-    );
+          
+    ),
+                        BottomTabRoundedCorner(pokemonColor: pokemonPageUltility().pokemonColor()),
+
+                  ],
+                );
   }
 }
 

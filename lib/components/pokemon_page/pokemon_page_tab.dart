@@ -11,7 +11,7 @@ import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_evolution_tab.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_moves_tab.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_stat_tab.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_animation.dart';
+import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
 
 
@@ -43,25 +43,26 @@ class TabPageViewContainer extends StatelessWidget {
       {Key key, @required this.tabKey, @required this.pageContent})
       : super(key: key);
   final String tabKey;
-  final List<Widget> pageContent;
+  final SliverList pageContent;
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
-        return CustomScrollView(
-          key: PageStorageKey<String>(tabKey),
-          slivers: <Widget>[
-            SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(pageContent),
+        return Container(
+          child: CustomScrollView(
+            key: PageStorageKey<String>(tabKey),
+            physics: ClampingScrollPhysics(),
+            slivers: <Widget>[
+              SliverOverlapInjector(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               ),
-            )
-          ],
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                sliver: pageContent,
+              )
+            ],
+          ),
         );
       },
     );

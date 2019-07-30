@@ -17,6 +17,7 @@ class Pokemon {
   final String habitat;
   final String generation;
   final int captureRate;
+  final int height;
 
   // String imgUrlBuild(int id){
   // //https://www.serebii.net/art/th/300.png
@@ -45,7 +46,8 @@ class Pokemon {
       this.moves,
       this.abilities,
       this.sprites,
-      this.imgUrl});
+      this.imgUrl,
+      this.height});
 
   factory Pokemon.fromJson(
       {Map<String, dynamic> pokemonJson,
@@ -55,6 +57,7 @@ class Pokemon {
     var typesFromJson = pokemonJson['types'] as List;
     List<PokemonType> pokemonTypes =
         typesFromJson.map((i) => PokemonType.fromJson(i)).toList();
+        pokemonTypes.sort((a, b) => a.slot.compareTo(b.slot));
     var statsFromJson = pokemonJson['stats'] as List;
     List<PokemonStat> pokemonStats =
         statsFromJson.map((i) => PokemonStat.fromJson(i)).toList();
@@ -115,6 +118,7 @@ class Pokemon {
         habitat: speciesJson['habitat']['name'],
         captureRate: speciesJson['capture_rate'],
         imgUrl: baseImgUrl + idString + '.png',
+        height: pokemonJson['height'],
         generation: 'Generation ' +
             speciesJson['generation']['url']
                 .replaceAll('https://pokeapi.co/api/v2/generation/', '')
@@ -193,4 +197,3 @@ class PokemonSprite {
   }
 }
 
-class PokemonEvolutions {}

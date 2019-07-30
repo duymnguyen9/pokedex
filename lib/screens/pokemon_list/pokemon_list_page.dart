@@ -1,20 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:pokedex/data/pokemon_list_data.dart';
-import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
-import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/services/http/pokemon_service.dart';
-import 'package:pokedex/components/splash/splash.dart';
+import 'package:pokedex/screens/loading_page.dart';
 import 'package:pokedex/components/animation/pokemon_list_page_animation.dart';
 import 'package:pokedex/components/animation/route_transition_animation.dart';
-
+import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
+import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
+import 'package:pokedex/screens/pokemon_list/pokemon_list_header.dart';
 
 final int pokemonsCount = 80;
 
-class PokemonsListPage extends StatelessWidget {
+class PokemonsListPage extends StatefulWidget {
   const PokemonsListPage({Key key}) : super(key: key);
+
+  @override
+  _PokemonsListPageState createState() => _PokemonsListPageState();
+}
+
+class _PokemonsListPageState extends State<PokemonsListPage> {
+  ScrollController _hideButtonController;
+  bool _isVisible = true;
+  bool _isAnimated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isAnimated = false;
+    _isVisible = true;
+    _hideButtonController = ScrollController();
+    _hideButtonController.addListener(() {
+      scrollListener();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 375.0;
@@ -25,99 +46,111 @@ class PokemonsListPage extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Pokemon"),
-      ),
-      body: Container(
-        color: Color(0xFFFAFAFA),
-        child: PokemonListView(),
-      ),
-    );
-  }
-}
+    final double topBarHeight = 18 * MediaQuery.of(context).size.height / 100;
+    final double startPosition = topBarHeight - topBarHeight / 4;
 
-class PokemonListView extends StatelessWidget {
-  const PokemonListView({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double delayBuider(int index){
-      if(index<10){
-        return (index/2).toDouble();
-      }
-      else{
-        return 0.3;
-      }
-    }
-
-    return ListView.builder(
-      itemCount: 150,
-      itemBuilder: (BuildContext context, int index) {
-
-        return  FadeIn(
-          delay: delayBuider(index),
-                  child: PokemonRowBuild(
-            index: index,
-            parentWidget: this,
+    return Material(
+          child: Stack(children: <Widget>[
+          ListDelayAnimation(
+            child: CustomScrollView(
+              controller: _hideButtonController,
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  delegate: PokemonListAppBar(
+                      expandedHeight: topBarHeight, minHeight: topBarHeight),
+                  pinned: false,
+                  floating: true,
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return rowItemAnimated(index);
+                    }, childCount: 150),
+                  ),
+                )
+              ],
+            ),
           ),
-        );
-      },
-    );
-
-
+          PokemonBottomSheetAnimation(
+            startPosition: startPosition+10,
+            endPosition: MediaQuery.of(context).size.height - topBarHeight / 2,
+            child: AnimatedContainer(
+              margin: EdgeInsets.only(
+                top: _isVisible ? 0 : topBarHeight / 2,
+              ),
+              duration: Duration(milliseconds: 200),
+              child: PokeDexBottom(topBarHeight: topBarHeight),
+            ),
+          ),
+        ]),
+    )
+    ;
   }
+
+  void scrollListener() {
+    if (_hideButtonController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      setState(() {
+        _isVisible = false;
+        _isAnimated = false;
+      });
+    }
+    if (_hideButtonController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      setState(() {
+        _isVisible = true;
+        _isAnimated = true;
+      });
+      
+    }
+  }
+  Widget rowItemAnimated(int index){
+    if(_isAnimated == false){
+     return ListItemAnimation(
+                                          child: PokemonRowBuild(
+                        index: index,
+                      ),
+                    );
+    }
+    else{
+     return PokemonRowBuild(
+                        index: index,
+                      );
+    }
+  }
+
 }
 
 class PokemonRowBuild extends StatelessWidget {
   const PokemonRowBuild({
     Key key,
-    this.index, @required this.parentWidget,
+    this.index,
   }) : super(key: key);
   final int index;
-  final Widget parentWidget;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        var navigateRoute = FutureBuilder<Pokemon>(
-          future: PokemonService(pokemonID: index + 1).fetchPokemon(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return PokemonPage(pokemon: snapshot.data);
-            } else if (snapshot.hasError) {
-              return Container(
-                  padding: EdgeInsets.all(30),
-                  child: Text(
-                    "${snapshot.error}",
-                    style: TextStyle(fontSize: 12),
-                  ));
-            }
-            // By default, show a loading spinner.
-            return Stack(
-              children: <Widget>[
-                SplashScreen(),
-                Center(
-                  child: Container(
-                      child: Image(
-                    image: AssetImage('assets/img/pokeball_loading.gif'),
-                  )),
-                ),
-              ],
-            );
-          },
-        );
+        onTap: () {
+    List<String> pokemonTypeList = pokemonList[index]["type"];
+    Gradient pokemonGradient =
+        pokemonColorsGradient[pokemonTypeList[0].trim()];
 
-        Navigator.push(
-          context,
-          FadeRoute(page: navigateRoute),
-        );
-      },
-      child: PokemonRow(dataRow: pokemonList[index]),
+    Navigator.push(
+      context,
+      FadeRoute(
+          page: LoadingScreen(
+        pokemonIndex: pokemonList[index]["id"],
+        pokemonGradient: pokemonGradient,
+      )),
     );
+        },
+        child: PokemonRow(dataRow: pokemonList[index]),
+      );
   }
 }
 
@@ -132,7 +165,7 @@ class PokemonRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil.instance.setHeight(75),
+      height: ScreenUtil.instance.setHeight(90),
       padding: EdgeInsets.fromLTRB(
           ScreenUtil.getInstance().setWidth(10),
           ScreenUtil.getInstance().setWidth(0),
@@ -171,8 +204,8 @@ class LeftRowComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         CachedNetworkImage(
-          height: ScreenUtil.getInstance().setHeight(50),
-          width: ScreenUtil.getInstance().setWidth(50),
+          height: ScreenUtil.getInstance().setHeight(70),
+          width: ScreenUtil.getInstance().setWidth(70),
           imageUrl: imgUrl,
         ),
         PokemonRowTextContent(
@@ -230,7 +263,7 @@ class PokemonRowTextContent extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Text(
-              dataRow["name"],
+              dataRow["name"][0].toUpperCase() + dataRow["name"].substring(1),
               style: TextStyle(
                   color: Color(0xFF4F4F4F),
                   fontFamily: "Avenir-Medium",
