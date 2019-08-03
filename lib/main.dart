@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 //Internal Package
 //import 'package:pokedex/models/pokemon.dart';
 //import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
-//import 'package:pokedex/services/http/pokemon_service.dart';
+// import 'package:pokedex/services/http/pokemon_service.dart';
 import 'package:pokedex/screens/pokemon_list/pokemon_list_page.dart';
 // import 'package:pokedex/screens/loading_page.dart';
 
-
-void main() {
+void main() async {
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -21,13 +21,14 @@ class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: 
-          PokemonsListPage(),
+          PokemonListPageBase(),
       );
   }
 }

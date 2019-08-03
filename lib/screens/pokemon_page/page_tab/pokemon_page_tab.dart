@@ -8,9 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_evolution_tab.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_moves_tab.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_stat_tab.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_evolution_tab.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_moves_tab.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_stat_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
 
@@ -74,12 +74,13 @@ class SubSectionWidget extends StatelessWidget {
       {Key key,
       this.subSectionHeader,
       this.child,
-      this.isLastSubSection = false,@required this.pokemonColor})
+      this.isLastSubSection = false,@required this.pokemonColor, this.alignmentType= MainAxisAlignment.spaceBetween})
       : super(key: key);
   final String subSectionHeader;
   final Widget child;
   final bool isLastSubSection;
   final Color pokemonColor;
+  final MainAxisAlignment alignmentType;
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +113,11 @@ class SubSectionWidget extends StatelessWidget {
 
     return Container(
       width: ScreenUtil.getInstance().setWidth(subSectionWidth),
-      height: ScreenUtil.getInstance().setHeight(87),
+      height: ScreenUtil.getInstance().setHeight(110),
       decoration: subSectionBoxDecoration(),
       child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: alignmentType,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             header(),
@@ -184,6 +185,7 @@ class SectionPanel extends StatelessWidget {
             ScreenUtil.getInstance().setWidth(0),
             ScreenUtil.getInstance().setHeight(15)),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[header(), child],
         ));
   }

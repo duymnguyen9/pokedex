@@ -4,14 +4,37 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:pokedex/data/pokemon_list_data.dart';
-import 'package:pokedex/screens/loading_page.dart';
 import 'package:pokedex/components/animation/pokemon_list_page_animation.dart';
 import 'package:pokedex/components/animation/route_transition_animation.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
+import 'package:pokedex/data/pokemon_color.dart';
+import 'package:pokedex/screens/loading_page.dart';
 import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
 import 'package:pokedex/screens/pokemon_list/pokemon_list_header.dart';
+import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 
 final int pokemonsCount = 80;
+
+class PokemonListPageBase extends StatelessWidget {
+  const PokemonListPageBase({Key key}) : super(key: key);
+
+  Widget verifyScreenHeight(BuildContext context, double screenheight) {
+    if (screenheight > 10) {
+      return PokemonsListPage();
+    } else {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: verifyScreenHeight(context, MediaQuery.of(context).size.height),
+    );
+  }
+}
 
 class PokemonsListPage extends StatefulWidget {
   const PokemonsListPage({Key key}) : super(key: key);
@@ -23,17 +46,26 @@ class PokemonsListPage extends StatefulWidget {
 class _PokemonsListPageState extends State<PokemonsListPage> {
   ScrollController _hideButtonController;
   bool _isVisible = true;
-  bool _isAnimated = false;
-
+  bool _isInitial = false;
   @override
   void initState() {
     super.initState();
-    _isAnimated = false;
     _isVisible = true;
     _hideButtonController = ScrollController();
+    _isInitial = true;
+
+    //Add Listener
     _hideButtonController.addListener(() {
       scrollListener();
     });
+  }
+
+  @override
+  void dispose() {
+    _hideButtonController.removeListener(() {
+      scrollListener();
+    });
+    super.dispose();
   }
 
   @override
@@ -46,83 +78,104 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
       allowFontScaling: true,
     )..init(context);
 
-    final double topBarHeight = 18 * MediaQuery.of(context).size.height / 100;
-    final double startPosition = topBarHeight - topBarHeight / 4;
+    final double topBarHeight = 14 * MediaQuery.of(context).size.height / 100;
+    final double startPosition = topBarHeight - (topBarHeight / 4);
 
     return Material(
-          child: Stack(children: <Widget>[
-          ListDelayAnimation(
-            child: CustomScrollView(
-              controller: _hideButtonController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  delegate: PokemonListAppBar(
-                      expandedHeight: topBarHeight, minHeight: topBarHeight),
-                  pinned: false,
-                  floating: true,
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(
-                    top: 10,
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return rowItemAnimated(index);
-                    }, childCount: 150),
-                  ),
-                )
-              ],
-            ),
-          ),
-          PokemonBottomSheetAnimation(
-            startPosition: startPosition+10,
-            endPosition: MediaQuery.of(context).size.height - topBarHeight / 2,
-            child: AnimatedContainer(
-              margin: EdgeInsets.only(
-                top: _isVisible ? 0 : topBarHeight / 2,
+      child: Stack(overflow: Overflow.visible, children: <Widget>[
+        ListDelayAnimation(
+          child: CustomScrollView(
+            controller: _hideButtonController,
+            slivers: <Widget>[
+              SliverPersistentHeader(
+                delegate: PokemonListAppBar(
+                    expandedHeight: topBarHeight, minHeight: topBarHeight),
+                floating: true,
               ),
-              duration: Duration(milliseconds: 200),
-              child: PokeDexBottom(topBarHeight: topBarHeight),
-            ),
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  top: 10,
+                ),
+                sliver: DelayWrapper(
+                  child: SliverPokemonListBuild(
+                    isInitial: _isInitial,
+                  ),
+                  delay: Duration(milliseconds: 1500),
+                  waiting: SliverFillRemaining(
+                    child: Container(),
+                  ),
+                ),
+              )
+            ],
           ),
-        ]),
-    )
-    ;
+        ),
+        BottomPanelAnimation(
+          startPosition: startPosition + 10,
+          endPosition: MediaQuery.of(context).size.height - topBarHeight / 1.5,
+          child: AnimatedContainer(
+            margin: EdgeInsets.only(
+              top: _isVisible ? 0 : topBarHeight / 1.5,
+            ),
+            duration: Duration(milliseconds: 200),
+            child: PokeDexBottom(topBarHeight: topBarHeight),
+          ),
+          //   child: Container(width:         MediaQuery.of(context).size.width,
+          // height:MediaQuery.of(context).size.height - topBarHeight + topBarHeight / 4, color: Colors.red)
+        ),
+      ]),
+    );
   }
 
   void scrollListener() {
+    double velocity = _hideButtonController.position.activity.velocity;
     if (_hideButtonController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
+            ScrollDirection.reverse &&
+        velocity >= 100) {
       setState(() {
         _isVisible = false;
-        _isAnimated = false;
       });
     }
     if (_hideButtonController.position.userScrollDirection ==
-        ScrollDirection.forward) {
+            ScrollDirection.forward &&
+        velocity <= -100) {
       setState(() {
+        _isInitial = false;
         _isVisible = true;
-        _isAnimated = true;
       });
-      
     }
   }
-  Widget rowItemAnimated(int index){
-    if(_isAnimated == false){
-     return ListItemAnimation(
-                                          child: PokemonRowBuild(
-                        index: index,
-                      ),
-                    );
-    }
-    else{
-     return PokemonRowBuild(
-                        index: index,
-                      );
-    }
+}
+
+class SliverPokemonListBuild extends StatelessWidget {
+  const SliverPokemonListBuild({Key key, this.isInitial}) : super(key: key);
+  final bool isInitial;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        if (index < 8) {
+          return rowItemAnimated(index);
+        } else {
+          return PokemonRowBuild(index: index);
+        }
+      }, childCount: pokemonsCount),
+    );
   }
 
+  Widget rowItemAnimated(int index) {
+    if (isInitial == true) {
+      return ListItemAnimation(
+        child: PokemonRowBuild(
+          index: index,
+        ),
+      );
+    } else {
+      return PokemonRowBuild(
+        index: index,
+      );
+    }
+  }
 }
 
 class PokemonRowBuild extends StatelessWidget {
@@ -135,22 +188,23 @@ class PokemonRowBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-    List<String> pokemonTypeList = pokemonList[index]["type"];
-    Gradient pokemonGradient =
-        pokemonColorsGradient[pokemonTypeList[0].trim()];
+      onTap: () {
+        List<String> pokemonTypeList = pokemonList[index]["type"];
+        Gradient pokemonGradient =
+            pokemonColorsGradient[pokemonTypeList[0].trim()];
 
-    Navigator.push(
-      context,
-      FadeRoute(
-          page: LoadingScreen(
-        pokemonIndex: pokemonList[index]["id"],
-        pokemonGradient: pokemonGradient,
-      )),
+        Navigator.push(
+          context,
+          ColorTransition(
+              page: PokemonPage(
+            pokemonGradient: pokemonGradient,
+            pokemonIndex: pokemonList[index]["id"],
+            loadingScreenType: LoadingScreenType.pokemon,
+          )),
+        );
+      },
+      child: PokemonRow(dataRow: pokemonList[index]),
     );
-        },
-        child: PokemonRow(dataRow: pokemonList[index]),
-      );
   }
 }
 

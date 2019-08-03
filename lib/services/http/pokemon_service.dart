@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'package:pokedex/models/pokemon.dart';
+import 'package:pokedex/models/pokemon_move.dart';
 
 class PokemonService {
   final int pokemonID;
   PokemonService({this.pokemonID});
-
-
 
   Future<String> fetchAbilities(url) async {
     List<String> versionGroup = [
@@ -81,16 +81,18 @@ class PokemonService {
       var currentPosition = evolutionJson["evolves_to"];
       List<Map<String, String>> evolutionList = [];
       for (var item in currentPosition) {
-        String typeBuild(var jsonEntry){
+        String typeBuild(var jsonEntry) {
           String output;
-          if(jsonEntry["evolution_details"][0]["trigger"]["name"] == "level-up"){
-            output = "Lv." + item["evolution_details"][0]["min_level"].toString();
-          }
-          else{
+          if (jsonEntry["evolution_details"][0]["trigger"]["name"] ==
+              "level-up") {
+            output =
+                "Lv." + item["evolution_details"][0]["min_level"].toString();
+          } else {
             output = item["evolution_details"][0]["trigger"]["name"];
           }
           return output;
         }
+
         evolutionList.add({
           "name": evolutionJson["species"]["name"],
           "evolvedName": item["species"]["name"],
@@ -116,20 +118,35 @@ class PokemonService {
           });
         }
       }
-
-      // while(currentPosition['evolves_to'].isNotEmpty){
-      //   String speciesName = currentPosition['species']['name'];
-      //   print(speciesName);
-      //   for(var item in  currentPosition['evolves_to']){
-      //     String evolvedName = item['species']['name'];
-      //     print({speciesName:evolvedName});
-      //     evolutionList.add({speciesName:evolvedName});
-      //   }
-      //   currentPosition = currentPosition['evolves_to'];
-      // }
       return evolutionList;
     } else {
       throw Exception('Failed to load pokemon ability fetchAbilities function');
+    }
+  }
+}
+
+enum PokemonMoveServiceType { id, url }
+
+class PokemonMoveService {
+  final int id;
+  final String url;
+  final PokemonMoveServiceType pokemonMoveServiceType;
+  PokemonMoveService({@required this.pokemonMoveServiceType, this.url, this.id});
+
+  Future<PokemonMoveDetail> fetchPokemonMoveData() async {
+    String pokemonMoveUrl="";
+    if (pokemonMoveServiceType == PokemonMoveServiceType.id) {
+      pokemonMoveUrl = "http://pokeapi.co/api/v2/move/" + id.toString();
+    } else if (pokemonMoveServiceType == PokemonMoveServiceType.url) {
+      pokemonMoveUrl = url;
+    }
+
+    final response = await http.get(pokemonMoveUrl);
+    if (response.statusCode == 200) {
+      var decodeJson = json.decode(response.body);
+      return PokemonMoveDetail.fromJson(json: decodeJson);
+    } else {
+      throw Exception('Failed to Fetch PokemonMoveData');
     }
   }
 }

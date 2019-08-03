@@ -1,19 +1,22 @@
 TODOS:
+  Alt + D to Mark DONE
   Individual Pokemon Page:@high
     ✔ Stats Panel @done(19-07-11 17:00)
     ✔ Ability Panel @done(19-07-11 17:00)
     ✔ Breeding Panel @done(19-07-12 17:33)
     ✔ Evolutions Panel @done(19-07-14 11:19)
     ✔ Moves Panel @done(19-07-14 11:19)
-    ☐ Move the Loading Screen to its own separate page
-    ☐ Convert FutureBuilder to stateful so you have more control
-    ☐ Animation
-      ☐ list to individual transition
-      ☐ CustomScrollView
-      ☐ pokemon image
-      ☐ statbar
-      ☐ background gradient
-      ☐ sheet pullup animation
+    ✔ Move the Loading Screen to its own separate page @done(19-07-30 11:58)
+    ✔ Convert FutureBuilder to stateful so you have more control @done(19-07-30 11:58)
+    ✔ Animation @done(19-07-30 11:59)
+      ✔ list to individual transition @done(19-07-30 11:59)
+      ✔ CustomScrollView @done(19-07-30 11:59)
+      ✔ pokemon image @done(19-07-30 11:59)
+      ✔ statbar @done(19-07-30 11:59)
+      ✔ background gradient @done(19-07-30 11:59)
+      ✔ sheet pullup animation @done(19-07-30 11:59)
   Pokemon List Page:
-    ☐ use Moor and Provider to create store pokemon data
-    ☐ pokemon List page template
+    ✔ Fix Pokedex bottom panel for profile mode @done(19-07-30 23:18)
+    ✔ Change listItem animation @done(19-07-30 23:18)
+  Pokemon Move Page:
+    ☐ Create front page

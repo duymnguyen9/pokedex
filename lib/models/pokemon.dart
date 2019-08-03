@@ -19,17 +19,6 @@ class Pokemon {
   final int captureRate;
   final int height;
 
-  // String imgUrlBuild(int id){
-  // //https://www.serebii.net/art/th/300.png
-  // String baseImgUrl2 = 'https://www.serebii.net/art/th/';
-
-  // //https://assets.pokemon.com/assets/cms2/img/pokedex/full/300.png
-  // String baseImgUrl ='https://assets.pokemon.com/assets/cms2/img/pokedex/full/';
-  // String idString = id.toString().padLeft(3, '0');
-  //   String completeUrl = baseImgUrl + idString + '.png';
-  //   return completeUrl;
-  // }
-
   Pokemon(
       {this.id,
       this.name,
@@ -157,14 +146,16 @@ class PokemonStat {
 class PokemonMove {
   final String levelLearned;
   final String name;
+  final String url;
 
-  PokemonMove({this.levelLearned, this.name});
+  PokemonMove({this.levelLearned, this.name, this.url});
 
   factory PokemonMove.fromJson(Map<String, dynamic> json) {
     var versionGroupList = json['version_group_details'][0];
     return PokemonMove(
         levelLearned: versionGroupList['level_learned_at'].toString(),
-        name: json['move']['name']);
+        name: json['move']['name'],
+        url: json['move']['url']);
   }
 }
 

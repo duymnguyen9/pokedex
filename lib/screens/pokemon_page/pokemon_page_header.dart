@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
 const double pokemonSheetTopPosition = 222;
@@ -204,7 +204,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         Positioned(
           top: 0,
           child: RoundedCornerAnimation(
-            delay: 2.4,
+            delay: 4,
             child: Container(
                 height: ScreenUtil.getInstance().setHeight(170),
                 width: MediaQuery.of(context).size.width,
@@ -215,7 +215,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         Positioned(
           top: roundedBorderSheetPosition(),
           child: RoundedCornerAnimation(
-            delay: 2.4,
+            delay: 4,
             child: RoundedBackgroundTop(
               bottomHeight: roundedBorderSheetHeight(),
               pokemon: pokemon,
@@ -236,7 +236,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         Positioned(
           top: pokemonNamePosition(),
           child: FadeIn(
-            delay: 1.5,
+            delay: 4,
             child: SwipeDownTrigger(
               child: PokemonNamePanel(
                 brightness: pokemonNameColorChange(),
@@ -251,7 +251,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
           child: Opacity(
             opacity: pokemonTypePanelOpacity(),
             child: FadeIn(
-              delay: 1.8,
+              delay: 4,
               child: SwipeDownTrigger(
                 child: PokemonTypePanel(
                   pokemon: pokemon,
@@ -265,7 +265,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
           child: Opacity(
               opacity: pokemonDescriptionPanelOpacity(),
               child: FadeIn(
-                delay: 2.1,
+                delay: 4.3,
                 child: PokemonDescriptionPanel(
                   pokemon: pokemon,
                 ),
@@ -274,7 +274,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         Positioned(
           top: pokemonTabbarPosition(),
           child: FadeIn(
-            delay: 2.4,
+            delay: 4.5,
             child: PokemonPageTabBar(
               pokemon: pokemon,
             ),
@@ -284,7 +284,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
             top: ScreenUtil.getInstance().setHeight(30),
             left: ScreenUtil.getInstance().setWidth(10),
             child: FadeIn(
-              delay: 2.4,
+              delay: 5,
               child: IconButton(
                 icon: const Icon(Icons.expand_more,
                     size: 30, color: Colors.white),
@@ -324,16 +324,13 @@ class PokemonNamePanel extends StatelessWidget {
     return Container(
         width: MediaQuery.of(context).size.width,
         child: Center(
-          child: Opacity(
-            opacity: 1,
-            child: Text(
-                pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
-                style: TextStyle(
-                    fontFamily: 'Avenir-Book',
-                    fontSize: textSize,
-                    color: HSVColor.fromAHSV(1, 0, 0, brightness).toColor(),
-                    fontWeight: FontWeight.w100)),
-          ),
+          child: Text(
+              pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
+              style: TextStyle(
+                  fontFamily: 'Avenir-Book',
+                  fontSize: textSize,
+                  color: HSVColor.fromAHSV(1, 0, 0, brightness).toColor(),
+                  fontWeight: FontWeight.w100)),
         ));
   }
 }
@@ -481,7 +478,7 @@ class PokemonMainImage extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: HeaderImageAnimation(
-        delay: 1.1,
+        delay: 2,
         child: CachedNetworkImage(
             imageUrl: pokemon.imgUrl,
             width: ScreenUtil.getInstance().setHeight(180),

@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/screens/loading_page.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
+import 'package:pokedex/data/pokemon_color.dart';
+import 'package:pokedex/components/animation/route_transition_animation.dart';
+import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
+import 'package:pokedex/services/http/pokemon_service.dart';
 
 
 class PokemonMovesTab extends StatelessWidget {
@@ -55,7 +60,7 @@ class MovesSection extends StatelessWidget {
     for (var move in pokemonMovesSorted) {
       if (move.levelLearned !="0") {
               movesWidgetList.add( 
-                FadeIn(delay: 0.5+ delayCount, child: MoveRowWidget(pokemonMove: move)));
+                FadeIn(delay: 0.5+ delayCount, child: MoveRowInkwell(pokemonMove: move)));
       movesWidgetList.add(movesSeparatorWidget);
       delayCount +=0.5;
       }
@@ -146,6 +151,36 @@ class MoveRowWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class MoveRowInkwell extends StatelessWidget {
+  const MoveRowInkwell({Key key, this.pokemonMove}) : super(key: key);
+  final PokemonMove pokemonMove;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: (){
+            String pokemonMoveName =
+        upperCaseEveryWords(pokemonMove.name.replaceAll('-', ' '));
+        String type = pokemonMovesWithType[pokemonMoveName.toLowerCase().replaceAll(" ", "")];
+        Gradient pokemonGradient = pokemonColorsGradient[type];
+        
+        
+        Navigator.push(context, 
+        FadeRoute(
+          page: 
+          PokemonPage(
+            loadingScreenType: LoadingScreenType.move,
+            pokemonMoveServiceType: PokemonMoveServiceType.url,
+            pokemonGradient: pokemonGradient,
+            moveUrl: pokemonMove.url,
+          )
+        ));
+      },
+      child: MoveRowWidget(pokemonMove: pokemonMove,),
     );
   }
 }

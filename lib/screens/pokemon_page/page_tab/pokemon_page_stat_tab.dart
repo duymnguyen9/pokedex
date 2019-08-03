@@ -11,8 +11,9 @@ import 'package:percent_indicator/percent_indicator.dart';
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
+import 'package:pokedex/data/pokemon_color.dart';
 
 
 class PokemonPageStatTab extends StatelessWidget {
@@ -32,6 +33,10 @@ class PokemonPageStatTab extends StatelessWidget {
           ),
           PokemonAbilitySection(
             pokemon: pokemon,
+            pokemonColor: pokemonColor,
+          ),
+          PokemonBreedingSection(
+                        pokemon: pokemon,
             pokemonColor: pokemonColor,
           ),
           PokemonCaptureSection(
@@ -322,6 +327,7 @@ class PokemonBreedingSection extends StatelessWidget {
         pokemon: pokemon,
         sectionHeader: "Breeding",
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             EggGroupContent(
               pokemon: pokemon,
@@ -476,9 +482,9 @@ class GenderPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil.getInstance().setWidth(40),
-      height: ScreenUtil.getInstance().setHeight(40),
+      height: ScreenUtil.getInstance().setHeight(50),
       child: CircularPercentIndicator(
-        radius: ScreenUtil.getInstance().setWidth(37),
+        radius: ScreenUtil.getInstance().setWidth(30),
         lineWidth: 3.5,
         percent: (pokemon.genderRate.abs() / 8),
         center: Image.asset(
@@ -505,7 +511,7 @@ class GenderColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil.getInstance().setWidth(50),
-      height: ScreenUtil.getInstance().setHeight(50),
+      height: ScreenUtil.getInstance().setHeight(55),
       child: Column(
         children: <Widget>[
           Container(
@@ -514,9 +520,9 @@ class GenderColumn extends StatelessWidget {
               style: TextStyle(
                   color: Color(0xFFCE71E1),
                   fontFamily: "Avenir-Book",
-                  height: 1.3,
-                  fontSize: ScreenUtil.getInstance().setSp(15),
-                  fontWeight: FontWeight.w300),
+                  height: 1.1,
+                  fontSize: ScreenUtil.getInstance().setSp(13.5),
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Container(
@@ -525,9 +531,9 @@ class GenderColumn extends StatelessWidget {
               style: TextStyle(
                   color: Color(0xFF80B6F4),
                   fontFamily: "Avenir-Book",
-                  height: 1.3,
-                  fontSize: ScreenUtil.getInstance().setSp(15),
-                  fontWeight: FontWeight.w300),
+                  height: 1.1,
+                  fontSize: ScreenUtil.getInstance().setSp(13.5),
+                  fontWeight: FontWeight.w500),
             ),
           ),
         ],

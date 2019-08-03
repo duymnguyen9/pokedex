@@ -1,43 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import "dart:math" show pi;
-import 'package:pokedex/services/http/pokemon_service.dart';
-import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
-import 'package:pokedex/components/animation/route_transition_animation.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({Key key, this.pokemonIndex, this.pokemonGradient})
-      : super(key: key);
-  final int pokemonIndex;
-  final Gradient pokemonGradient;
+enum LoadingScreenType { pokemon, move }
+
+class LoadingScreenBuild extends StatelessWidget {
+  const LoadingScreenBuild({Key key}) : super(key: key);
 
   @override
-  _LoadingScreenState createState() => _LoadingScreenState();
+  Widget build(BuildContext context) {
+    final tween = MultiTrackTween([
+      Track("opacity").add(
+          Duration(milliseconds: 300), Tween(begin: 0.0, end: 1.0),
+          curve: Curves.fastOutSlowIn),
+      Track("size").add(
+          Duration(milliseconds: 400), Tween(begin: 0.0, end: 1.0),
+          curve: Curves.easeOutBack),
+    ]);
+
+    return ControlledAnimation(
+        tween: tween,
+        duration: tween.duration,
+        playback: Playback.PLAY_FORWARD,
+        delay: Duration(milliseconds: 200),
+        child: LoadingScreen(),
+        builderWithChild: (context, child, animation) {
+          return Transform.scale(
+            scale: animation["size"],
+            child:LoadingScreen(),
+          );
+        });
+  }
 }
 
-class _LoadingScreenState extends State<LoadingScreen> {
-  bool isLoading;
-
-  @override
-  void initState() {
-    setState(() {
-      isLoading = true;
-    });
-    super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      runInitTasks();
-    });
-  }
-
-  @protected
-  Future runInitTasks() async {
-    PokemonService(pokemonID: widget.pokemonIndex).fetchPokemon().then((value) {
-      Navigator.pushReplacement(
-          context, SlideUpRoute(widget: PokemonPage(pokemon: value)));
-    });
-  }
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Container(
           width: screenDimension.width,
           height: screenDimension.height,
-          decoration: BoxDecoration(gradient: widget.pokemonGradient),
           child: Stack(
             children: <Widget>[
               Positioned(

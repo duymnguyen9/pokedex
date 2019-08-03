@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class PokedexTopPanel extends StatelessWidget {
   const PokedexTopPanel({
     Key key,
@@ -31,13 +30,39 @@ class PokeDexBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: PokedexBottomPainter(topBarHeight: topBarHeight),
-      size: Size(
-        MediaQuery.of(context).size.width,
-        MediaQuery.of(context).size.height - topBarHeight + topBarHeight / 4,
-      ),
-    );
+    return Container(
+        height: MediaQuery.of(context).size.height - (topBarHeight/2),
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+                    overflow: Overflow.visible,
+
+          children: <Widget>[
+            Positioned(
+              top: 0,
+              left: 0,
+                          child: CustomPaint(
+                painter: PokedexBottomPainter(topBarHeight: topBarHeight),
+                size: Size(
+                  MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height - (topBarHeight/2),
+                ),
+              ),
+            ),
+            Positioned(
+              top: topBarHeight / 10,
+              left: ((8* MediaQuery.of(context).size.width)/10)- 5,
+              child: Container(
+                width: (2* MediaQuery.of(context).size.width)/10,
+                child: Image.asset(
+                  "assets/img/pokeball2.png",
+                  width: topBarHeight / 2,
+                  height: topBarHeight / 2,
+                ),
+              ),
+            )
+          ],
+        )
+        );
   }
 }
 
@@ -94,9 +119,7 @@ class PokedexTopPainter extends CustomPainter {
         return pathOutput;
       }
 
-      final outlineBorder = Paint()
-        ..color = Color(0xFFA20006);
-
+      final outlineBorder = Paint()..color = Color(0xFFA20006);
 
       canvas.drawShadow(topSeparatorPath(), Color(0xFF000000), 4, true);
 
@@ -229,7 +252,7 @@ class PokedexBottomPainter extends CustomPainter {
       Rect gradientBox = Rect.fromLTWH(0, 0, size.width, topHeight);
       final basePaint = Paint()
         ..shader = backgroundGradient.createShader(gradientBox);
-
+      canvas.drawShadow(backgroundPath().shift(Offset(0, - setRelativeHeight(2))), Colors.black87, 4, true);
       canvas.drawPath(backgroundPath(), basePaint);
     }
 
@@ -271,14 +294,6 @@ class PokedexBottomPainter extends CustomPainter {
     drawBackgroundTop();
     drawTriangleMid();
     drawBottomOvalRing();
-    // Path testPath = Path();
-    // print(size.height/2);
-    // testPath.lineTo(0, size.height/2);
-    //     testPath.lineTo(size.width/2, size.height/2);
-    // testPath.lineTo(size.width/2, 0);
-    //     testPath.lineTo(0, 0);
-    //     var testPaint = Paint()..color = Colors.blue;
-    //     canvas.drawPath(testPath, testPaint);
   }
 
   @override

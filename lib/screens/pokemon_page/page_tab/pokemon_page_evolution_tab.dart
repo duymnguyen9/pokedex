@@ -4,11 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
-import 'package:pokedex/components/pokemon_page/pokemon_page_tab.dart';
+import 'package:pokedex/screens/loading_page.dart';
+import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_tab.dart';
 import 'package:pokedex/components/animation/route_transition_animation.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 import 'package:pokedex/data/pokemon_list_data.dart';
-import 'package:pokedex/screens/loading_page.dart';
+import 'package:pokedex/data/pokemon_color.dart';
+import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -154,14 +156,14 @@ class EvolutionSubSection extends StatelessWidget {
         List<String> pokemonTypeList = pokemonList[int.parse(id) - 1]["type"];
         Gradient pokemonGradient =
             pokemonColorsGradient[pokemonTypeList[0].trim()];
+
         Navigator.push(
-          context,
-          FadeRoute(
-              page: LoadingScreen(
-            pokemonIndex: int.parse(id),
-            pokemonGradient: pokemonGradient,
-          )),
-        );
+            context,
+            ColorTransition(
+                page: PokemonPage(
+                  loadingScreenType: LoadingScreenType.pokemon,
+                    pokemonGradient: pokemonGradient,
+                    pokemonIndex: int.parse(id))));
       },
       child: Container(
         height: ScreenUtil.getInstance().setHeight(180),
