@@ -206,7 +206,7 @@ Map<String, Color> pokemonColors = {
   "water": Color(0xFF559EDF),
   "bug": Color(0xFF9DC130),
   "dark": Color(0xFF5F606D),
-  "dragon": Color(0xFF5F606D),
+  "dragon": Color(0xff0C69C8),
   "electric": Color(0xFFEDD53F),
   "fairy": Color(0xFFEF97E6),
   "fighting": Color(0xFFD94256),

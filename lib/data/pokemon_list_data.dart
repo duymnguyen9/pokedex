@@ -185,7 +185,7 @@ const pokemonList = [
 {'id': 151, 'name': 'mew', 'type': ['psychic']},
 {'id': 152, 'name': 'chikorita', 'type': ['grass']},
 {'id': 153, 'name': 'bayleef', 'type': ['grass']},
-
+{'id': 154, 'name': 'meganium', 'type': ['grass']},
 {'id': 155, 'name': 'cyndaquil', 'type': ['fire']},
 {'id': 156, 'name': 'quilava', 'type': ['fire']},
 {'id': 157, 'name': 'typhlosion', 'type': ['fire']},

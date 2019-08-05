@@ -48,7 +48,7 @@ class _PokemonPageState extends State<PokemonPage> {
       isPokemon = false;
       isMove = false;
     });
-    pokemonServiceTypeLookup();
+    Future.delayed(Duration(seconds: 1),()=>pokemonServiceTypeLookup());
     super.initState();
   }
 
@@ -112,6 +112,7 @@ class _PokemonPageState extends State<PokemonPage> {
 
 
     void pokemonServiceTypeLookup() async {
+      
     if(widget.loadingScreenType == LoadingScreenType.pokemon){
     Pokemon pokemonResult  = await  PokemonService(pokemonID: widget.pokemonIndex).fetchPokemon();
         setState(() {
@@ -144,7 +145,7 @@ class AnimatedBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     MultiTrackTween tween = MultiTrackTween([
       Track("sheetPosition").add(
-          Duration(milliseconds: 400),
+          Duration(milliseconds: 900),
           Tween(
               begin: ScreenUtil.getInstance().setHeight(ScreenUtil.getInstance().height),
               end: ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition)),
@@ -155,7 +156,7 @@ class AnimatedBottomSheet extends StatelessWidget {
           )
     ]);
     return ControlledAnimation(
-      delay: Duration(milliseconds: 300),
+      delay: Duration(milliseconds: 200),
       playback: Playback.PLAY_FORWARD,
       duration: tween.duration,
       tween: tween,
@@ -167,7 +168,7 @@ class AnimatedBottomSheet extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: Material(
                 elevation: 30,
-                color: Color(0xFFFAFAFA),
+                color: Color(0xFFffffff),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(ScreenUtil.getInstance().setHeight(45)),
                     topRight: Radius.circular(ScreenUtil.getInstance().setHeight(45))),

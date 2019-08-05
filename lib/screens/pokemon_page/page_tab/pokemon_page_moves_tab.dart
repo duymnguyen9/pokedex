@@ -19,7 +19,7 @@ class PokemonMovesTab extends StatelessWidget {
   Widget build(BuildContext context) {
         screenSizeStatus("PokemonMovesTab", context);
         return Container(
-      color: Color(0xFFFAFAFA),
+      color: Color(0xFFffffff),
       child: TabPageViewContainer(
         tabKey: "MOVES",
 

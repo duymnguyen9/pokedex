@@ -23,7 +23,7 @@ class BottomTabRoundedCorner extends StatelessWidget {
             height: ScreenUtil.getInstance().setHeight(47),
             width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                color: Color(0xFFFAFAFA),
+                color: Color(0xFFffffff),
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(ScreenUtil().setHeight(45)),
                     bottomRight: Radius.circular(ScreenUtil().setHeight(45))))
@@ -69,7 +69,10 @@ class PokemonPageUltility {
     return pokemonColorsGradient[getPrimaryType().toLowerCase()];
   }
 
-  Color pokemonColor() => pokemonColors[getPrimaryType().toLowerCase()];
+  Color pokemonColor(){
+    print(pokemonColors[getPrimaryType().toLowerCase()].toString());
+    return pokemonColors[getPrimaryType().toLowerCase()];
+    }
 
 
   String getPokemonTypeDirectory() {

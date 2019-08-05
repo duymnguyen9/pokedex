@@ -80,11 +80,11 @@ class LoadingScreen extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                alignment: Alignment.center,
-                                child: PokeBallBouncingAnimation(
-                                  tween: tween,
+                                  alignment: Alignment.center,
+                                  child: PokeBallBouncingAnimation(
+                                    tween: tween,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                           height: 170,

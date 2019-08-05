@@ -62,6 +62,7 @@ flutter:
     - assets/img/ball.png
     - assets/img/pokeball.png
     - assets/img/pokeball3.png
+    - assets/img/pokeshake.gif
 
 
   # The following line ensures that the Material Icons font is

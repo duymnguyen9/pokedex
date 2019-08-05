@@ -59,7 +59,7 @@ class PokemonPageStatTab extends StatelessWidget {
         }
         statSectionListsOutput.add(BottomTabRoundedCorner(pokemonColor: pokemonColor,));
     return Container(
-      color: Color(0xFFFAFAFA),
+      color: Color(0xFFffffff),
       child: TabPageViewContainer(
         tabKey: "STATS",
                 pageContent: SliverList(

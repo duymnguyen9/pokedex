@@ -12,7 +12,7 @@ import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
 import 'package:pokedex/screens/pokemon_list/pokemon_list_header.dart';
 import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 
-final int pokemonsCount = 80;
+final int pokemonsCount = 300;
 
 class PokemonListPageBase extends StatelessWidget {
   const PokemonListPageBase({Key key}) : super(key: key);
@@ -83,31 +83,29 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
 
     return Material(
       child: Stack(overflow: Overflow.visible, children: <Widget>[
-        ListDelayAnimation(
-          child: CustomScrollView(
-            controller: _hideButtonController,
-            slivers: <Widget>[
-              SliverPersistentHeader(
-                delegate: PokemonListAppBar(
-                    expandedHeight: topBarHeight, minHeight: topBarHeight),
-                floating: true,
+        CustomScrollView(
+          controller: _hideButtonController,
+          slivers: <Widget>[
+            SliverPersistentHeader(
+              delegate: PokemonListAppBar(
+                  expandedHeight: topBarHeight, minHeight: topBarHeight, isVisible: _isVisible),
+              floating: true,
+            ),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                top: 10,
               ),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  top: 10,
+              sliver: DelayWrapper(
+                child: SliverPokemonListBuild(
+                  isInitial: _isInitial,
                 ),
-                sliver: DelayWrapper(
-                  child: SliverPokemonListBuild(
-                    isInitial: _isInitial,
-                  ),
-                  delay: Duration(milliseconds: 1500),
-                  waiting: SliverFillRemaining(
-                    child: Container(),
-                  ),
+                delay: Duration(milliseconds: 200),
+                waiting: SliverFillRemaining(
+                  child: Container(),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
         BottomPanelAnimation(
           startPosition: startPosition + 10,
@@ -166,6 +164,7 @@ class SliverPokemonListBuild extends StatelessWidget {
   Widget rowItemAnimated(int index) {
     if (isInitial == true) {
       return ListItemAnimation(
+        index: index,
         child: PokemonRowBuild(
           index: index,
         ),
@@ -261,6 +260,19 @@ class LeftRowComponent extends StatelessWidget {
           height: ScreenUtil.getInstance().setHeight(70),
           width: ScreenUtil.getInstance().setWidth(70),
           imageUrl: imgUrl,
+          placeholder: (context, url){
+            return Container(
+              height: ScreenUtil.getInstance().setHeight(70),
+                        width: ScreenUtil.getInstance().setWidth(70),
+
+              child: Image.asset(
+            'assets/img/pokeshake.gif',
+            height: ScreenUtil.getInstance().setWidth(30),
+            width: ScreenUtil.getInstance().setWidth(30),
+            alignment: Alignment.bottomCenter,
+          ),
+            );
+          },
         ),
         PokemonRowTextContent(
           dataRow: dataRow,

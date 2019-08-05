@@ -48,6 +48,9 @@ class PokemonEvolutionTab extends StatelessWidget {
       title: "Size Comparison",
       pokemon: pokemon,
     ));
+    if(idSet.isEmpty){
+      idSet.add(pokemon.id);
+    }
     evolutionWidgets.add(PokemonSizeComparisonPanel(pokemonIDList: idSet));
 
     evolutionWidgets.add(BottomTabRoundedCorner(
@@ -55,7 +58,7 @@ class PokemonEvolutionTab extends StatelessWidget {
     ));
 
     return Container(
-      color: Color(0xFFFAFAFA),
+      color: Color(0xFFffffff),
       child: TabPageViewContainer(
         tabKey: "EVOLUTIONS",
         pageContent: SliverList(
@@ -161,7 +164,7 @@ class EvolutionSubSection extends StatelessWidget {
             context,
             ColorTransition(
                 page: PokemonPage(
-                  loadingScreenType: LoadingScreenType.pokemon,
+                    loadingScreenType: LoadingScreenType.pokemon,
                     pokemonGradient: pokemonGradient,
                     pokemonIndex: int.parse(id))));
       },
@@ -182,7 +185,7 @@ class EvolutionSubSection extends StatelessWidget {
                 height: ScreenUtil.getInstance().setHeight(15),
               ),
               Text(
-                name,
+                name[0].toUpperCase() + name.substring(1),
                 style: TextStyle(
                     color: Color(0xFF4F4F4F),
                     fontFamily: "Avenir-Book",
@@ -206,44 +209,58 @@ class PokemonSizeComparisonPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     double panelHeight = MediaQuery.of(context).size.height / 3;
 
-    return FutureBuilder(
-      future: pokemonWidgetList(context, panelHeight),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-            height: panelHeight,
-            width: MediaQuery.of(context).size.width,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: snapshot.data,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
+    return Container(
+      height: panelHeight,
+      width: MediaQuery.of(context).size.width,
+      child: FutureBuilder(
+        future: pokemonWidgetList(context, panelHeight),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              height: panelHeight,
+              width: MediaQuery.of(context).size.width,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: snapshot.data,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
 
-        // By default, show a loading spinner.
-        return CircularProgressIndicator();
-      },
+          // By default, show a loading spinner.
+          return Center(
+              child: Image(
+            image: AssetImage('assets/img/pokeball1.png'),
+            width: 50,
+            height: 50,
+          ));
+        },
+      ),
     );
   }
 
   Widget imageBuild(int id, double height) {
-    String imgUrl = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/' +
-        id.toString().padLeft(3, '0') +
-        '.png';
+    // String imgUrl = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/' +
+    //     id.toString().padLeft(3, '0') +
+    //     '.png';
+    String pokemonName = pokemonList[id - 1]["name"];
+    String imgUrl =
+        'https://img.pokemondb.net/artwork/large/' + pokemonName + '.jpg';
     return Container(
       height: height,
-      child: AspectRatio(
-        aspectRatio: 1.18,
-        child: CachedNetworkImage(
-          imageUrl: imgUrl,
-          height: height,
-          alignment: FractionalOffset.bottomCenter,
-          fit: BoxFit.fitHeight,
-          placeholder: (context, url) => CircularProgressIndicator(),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
+      child: CachedNetworkImage(
+        imageUrl: imgUrl,
+        height: height,
+        fit: BoxFit.fitHeight,
+        placeholder: (context, url) =>           Image.asset(
+          
+            'assets/img/pokeshake.gif',
+            height: 50,
+            width: 50,
+            alignment: Alignment.bottomCenter,
+          ),
+        errorWidget: (context, url, error) => Icon(Icons.error),
       ),
     );
   }
@@ -254,7 +271,6 @@ class PokemonSizeComparisonPanel extends StatelessWidget {
     int maxHeight = 0;
     for (int id in pokemonIDList) {
       int pokemonHeight = await getPokemonHeight(id);
-      print("pokemon Height is: " + pokemonHeight.toString());
       if (maxHeight < pokemonHeight) {
         maxHeight = pokemonHeight;
       }
@@ -269,14 +285,8 @@ class PokemonSizeComparisonPanel extends StatelessWidget {
     for (var item in pokemonMaps) {
       _pokemonWidgetList.add(Container(
         height: panelHeight,
-        width: item["height"] * relativeHeightUnit,
-        child: Stack(overflow: Overflow.visible, children: <Widget>[
-          Positioned(
-            top: panelHeight - (item["height"] * relativeHeightUnit),
-            // left: ScreenUtil.getInstance().setWidth(70) + marginValue,
-            child: imageBuild(item["id"], item["height"] * relativeHeightUnit),
-          ),
-        ]),
+        alignment: Alignment.bottomCenter,
+        child: imageBuild(item["id"], item["height"] * relativeHeightUnit),
       ));
       // marginValue += MediaQuery.of(context).size.width / 10;
     }
@@ -284,19 +294,14 @@ class PokemonSizeComparisonPanel extends StatelessWidget {
       0,
       Container(
         height: panelHeight,
+        alignment: Alignment.bottomCenter,
         width: 15 * relativeHeightUnit / 2,
-        child: Stack(overflow: Overflow.visible, children: <Widget>[
-          Positioned(
-            top: panelHeight - (15 * relativeHeightUnit),
-            left: ScreenUtil.getInstance().setWidth(10),
-            child: Container(
-              height: 15 * relativeHeightUnit,
-              child: Image.asset(
-                'assets/img/ash.png',
-              ),
-            ),
+        child: Container(
+          height: 15 * relativeHeightUnit,
+          child: Image.asset(
+            'assets/img/ash.png',
           ),
-        ]),
+        ),
       ),
     );
     // _pokemonWidgetList.add(imageBuild(, pokemonHeightcapture.toDouble()));
@@ -304,8 +309,8 @@ class PokemonSizeComparisonPanel extends StatelessWidget {
   }
 }
 
+
 Future<int> getPokemonHeight(int pokemonID) async {
-  print("inside getPokemonHeight");
   final String pokemonUrl =
       'http://pokeapi.co/api/v2/pokemon/' + pokemonID.toString() + '/';
   final pokemonResponseHeight = await http.get(pokemonUrl);

@@ -4,8 +4,13 @@ import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
 class PokemonListAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final double minHeight;
+  final bool isVisible;
 
-  PokemonListAppBar({this.expandedHeight, this.minHeight});
+  PokemonListAppBar({
+    this.expandedHeight,
+    this.minHeight,
+    this.isVisible,
+  });
 
   @override
   Widget build(
@@ -16,7 +21,11 @@ class PokemonListAppBar extends SliverPersistentHeaderDelegate {
       children: <Widget>[
         Positioned(
           top: 0,
-          child: Container(
+          child: AnimatedContainer(
+            margin: EdgeInsets.only(
+              bottom: isVisible ? 0 : expandedHeight,
+            ),
+            duration: Duration(milliseconds: 200),
             height: expandedHeight,
             child: PokedexTopPanel(topBarHeight: expandedHeight),
           ),

@@ -32,21 +32,22 @@ class FadeIn extends StatelessWidget {
 }
 
 class ListItemAnimation extends StatelessWidget {
-  const ListItemAnimation({Key key, this.child}) : super(key: key);
+  const ListItemAnimation({Key key, this.child, this.index}) : super(key: key);
   final Widget child;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     final tween = MultiTrackTween([
       Track("opacity")
-          .add(Duration(milliseconds: 300), Tween(begin: 0.4, end: 1.0)),
+          .add(Duration(milliseconds: 200), Tween(begin: 0.4, end: 1.0)),
       Track("translateY").add(
-          Duration(milliseconds: 400), Tween(begin: screenHeight / 2, end: 0.0),
+          Duration(milliseconds: 200), Tween(begin: screenHeight / 2, end: 0.0),
           curve: Curves.easeOut)
     ]);
     return ControlledAnimation(
-      delay: Duration(milliseconds: 300),
+      delay: Duration(milliseconds: 700+ (100* index)),
       duration: tween.duration,
       tween: tween,
       child: child,
@@ -144,7 +145,7 @@ class _BottomPanelAnimationState extends State<BottomPanelAnimation>
   }
 
   void animationdelay() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     _controller.forward();
   }
 

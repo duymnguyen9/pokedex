@@ -227,9 +227,9 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
           top: ScreenUtil.getInstance().setHeight(88) - shrinkOffset,
           child: SwipeDownTrigger(
             child: PokemonMainImage(
-              opacityValue: pokemonImageOpacity(),
-              pokemon: pokemon,
-            ),
+                opacityValue: pokemonImageOpacity(),
+                pokemon: pokemon,
+              ),
           ),
         ),
         //When shrinkOffset gets to 243 changes it to something else
@@ -417,7 +417,7 @@ class PokemonPageTabBar extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: indicatorHeight + ScreenUtil.getInstance().setWidth(38),
       decoration: BoxDecoration(
-        color: Color(0xFFFAFAFA),
+        color: Color(0xFFffffff),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(ScreenUtil.getInstance().setWidth(35)),
             topRight: Radius.circular(ScreenUtil.getInstance().setWidth(35))),
@@ -502,7 +502,7 @@ class RoundedBackgroundTop extends StatelessWidget {
       height: bottomHeight,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Color(0xFFFAFAFA),
+        color: Color(0xFFffffff),
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(ScreenUtil.getInstance().setWidth(35)),
             topRight: Radius.circular(ScreenUtil.getInstance().setWidth(35))),
