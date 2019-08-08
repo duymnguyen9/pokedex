@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
 
+
+
 class PokemonListAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final double minHeight;

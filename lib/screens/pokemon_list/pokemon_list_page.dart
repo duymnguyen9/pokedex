@@ -12,11 +12,13 @@ import 'package:pokedex/screens/pokemon_list/pokedex_cover.dart';
 import 'package:pokedex/screens/pokemon_list/pokemon_list_header.dart';
 import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 
+//the number of pokemons will be listed
 final int pokemonsCount = 300;
 
+
+//This widget is used for making sure the height of Container != 0
 class PokemonListPageBase extends StatelessWidget {
   const PokemonListPageBase({Key key}) : super(key: key);
-
   Widget verifyScreenHeight(BuildContext context, double screenheight) {
     if (screenheight > 10) {
       return PokemonsListPage();
@@ -36,6 +38,7 @@ class PokemonListPageBase extends StatelessWidget {
   }
 }
 
+
 class PokemonsListPage extends StatefulWidget {
   const PokemonsListPage({Key key}) : super(key: key);
 
@@ -45,6 +48,7 @@ class PokemonsListPage extends StatefulWidget {
 
 class _PokemonsListPageState extends State<PokemonsListPage> {
   ScrollController _hideButtonController;
+  //_isVisible is used to control whether the bottom bar will be show when scroll
   bool _isVisible = true;
   bool _isInitial = false;
   @override
@@ -70,6 +74,9 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    //This app was build based on Iphone X resolution
+    //ScreenUtil provided a way to normalize dimension with other Screen Resolution
     double defaultScreenWidth = 375.0;
     double defaultScreenHeight = 812.0;
     ScreenUtil.instance = ScreenUtil(
@@ -107,6 +114,8 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
             )
           ],
         ),
+        //Full Bottom Bar with Animation
+        //Eventually it wil be change
         BottomPanelAnimation(
           startPosition: startPosition + 10,
           endPosition: MediaQuery.of(context).size.height - topBarHeight / 1.5,
@@ -124,6 +133,7 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
     );
   }
 
+  //Listener for whether to hide bottom bar through _isVisible variable
   void scrollListener() {
     double velocity = _hideButtonController.position.activity.velocity;
     if (_hideButtonController.position.userScrollDirection ==

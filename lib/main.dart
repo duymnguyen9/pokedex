@@ -1,19 +1,9 @@
 //Flutter Package
 import 'package:flutter/material.dart';
-
-//Addition Package
-//import 'package:simple_animations/simple_animations.dart';
-
-//Internal Package
-//import 'package:pokedex/models/pokemon.dart';
-//import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
-// import 'package:pokedex/services/http/pokemon_service.dart';
 import 'package:pokedex/screens/pokemon_list/pokemon_list_page.dart';
-// import 'package:pokedex/screens/loading_page.dart';
 
 void main() async {
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
