@@ -15,7 +15,6 @@ import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 //the number of pokemons will be listed
 final int pokemonsCount = 300;
 
-
 //This widget is used for making sure the height of Container != 0
 class PokemonListPageBase extends StatelessWidget {
   const PokemonListPageBase({Key key}) : super(key: key);
@@ -37,7 +36,6 @@ class PokemonListPageBase extends StatelessWidget {
     );
   }
 }
-
 
 class PokemonsListPage extends StatefulWidget {
   const PokemonsListPage({Key key}) : super(key: key);
@@ -74,7 +72,6 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
 
   @override
   Widget build(BuildContext context) {
-
     //This app was build based on Iphone X resolution
     //ScreenUtil provided a way to normalize dimension with other Screen Resolution
     double defaultScreenWidth = 375.0;
@@ -135,17 +132,12 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
 
   //Listener for whether to hide bottom bar through _isVisible variable
   void scrollListener() {
-    double velocity = _hideButtonController.position.activity.velocity;
-    if (_hideButtonController.position.userScrollDirection ==
-            ScrollDirection.reverse &&
-        velocity >= 100) {
+    if (_hideButtonController.position.userScrollDirection == ScrollDirection.reverse) {
       setState(() {
         _isVisible = false;
       });
     }
-    if (_hideButtonController.position.userScrollDirection ==
-            ScrollDirection.forward &&
-        velocity <= -100) {
+    if (_hideButtonController.position.userScrollDirection == ScrollDirection.forward) {
       setState(() {
         _isInitial = false;
         _isVisible = true;
@@ -199,8 +191,7 @@ class PokemonRowBuild extends StatelessWidget {
     return InkWell(
       onTap: () {
         List<String> pokemonTypeList = pokemonList[index]["type"];
-        Gradient pokemonGradient =
-            pokemonColorsGradient[pokemonTypeList[0].trim()];
+        Gradient pokemonGradient = pokemonColorsGradient[pokemonTypeList[0].trim()];
 
         Navigator.push(
           context,
@@ -240,10 +231,7 @@ class PokemonRow extends StatelessWidget {
       )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          new LeftRowComponent(dataRow: dataRow),
-          new RightRowComponent(dataRow: dataRow)
-        ],
+        children: <Widget>[new LeftRowComponent(dataRow: dataRow), new RightRowComponent(dataRow: dataRow)],
       ),
     );
   }
@@ -270,17 +258,16 @@ class LeftRowComponent extends StatelessWidget {
           height: ScreenUtil.getInstance().setHeight(70),
           width: ScreenUtil.getInstance().setWidth(70),
           imageUrl: imgUrl,
-          placeholder: (context, url){
+          placeholder: (context, url) {
             return Container(
               height: ScreenUtil.getInstance().setHeight(70),
-                        width: ScreenUtil.getInstance().setWidth(70),
-
+              width: ScreenUtil.getInstance().setWidth(70),
               child: Image.asset(
-            'assets/img/pokeshake.gif',
-            height: ScreenUtil.getInstance().setWidth(30),
-            width: ScreenUtil.getInstance().setWidth(30),
-            alignment: Alignment.bottomCenter,
-          ),
+                'assets/img/pokeshake.gif',
+                height: ScreenUtil.getInstance().setWidth(30),
+                width: ScreenUtil.getInstance().setWidth(30),
+                alignment: Alignment.bottomCenter,
+              ),
             );
           },
         ),
@@ -304,8 +291,7 @@ class RightRowComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> rightWidgetList = [];
     for (var type in dataRow["type"]) {
-      String imgDirectory =
-          'assets/img/type/' + type.toLowerCase().replaceAll(" ", "") + ".png";
+      String imgDirectory = 'assets/img/type/' + type.toLowerCase().replaceAll(" ", "") + ".png";
       rightWidgetList.add(Container(
           child: Image.asset(
         imgDirectory,
@@ -321,18 +307,14 @@ class RightRowComponent extends StatelessWidget {
 }
 
 class PokemonRowTextContent extends StatelessWidget {
-  const PokemonRowTextContent({Key key, @required this.dataRow})
-      : super(key: key);
+  const PokemonRowTextContent({Key key, @required this.dataRow}) : super(key: key);
   final Map dataRow;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(
-          ScreenUtil.getInstance().setWidth(5),
-          ScreenUtil.getInstance().setWidth(0),
-          ScreenUtil.getInstance().setWidth(5),
-          ScreenUtil.getInstance().setWidth(0)),
+      margin: EdgeInsets.fromLTRB(ScreenUtil.getInstance().setWidth(5), ScreenUtil.getInstance().setWidth(0),
+          ScreenUtil.getInstance().setWidth(5), ScreenUtil.getInstance().setWidth(0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
