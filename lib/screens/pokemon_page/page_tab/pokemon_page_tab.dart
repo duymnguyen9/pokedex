@@ -13,8 +13,6 @@ import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_moves_tab.dar
 import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_stat_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 
-
-
 const double sectionWidth = 345;
 const double subSectionWidth = sectionWidth / 3;
 
@@ -25,23 +23,28 @@ class PokemonPageTabBarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color pokemonColor = pokemonPageUltility().pokemonColor();
-    return RoundedCornerAnimation(delay: 2, child:     TabBarView(
-      children: <Widget>[
-        PokemonPageStatTab(pokemon: pokemon, pokemonColor: pokemonColor),
-        PokemonEvolutionTab(pokemon: pokemon, pokemonColor: pokemonColor,),
-        PokemonMovesTab(
-          pokemon: pokemon,
-        ),
-      ],
-    ),);
-
+    return RoundedCornerAnimation(
+      delay: 2,
+      child: TabBarView(
+        children: <Widget>[
+          PokemonPageStatTab(pokemon: pokemon, pokemonColor: pokemonColor),
+          PokemonEvolutionTab(
+            pokemon: pokemon,
+            pokemonColor: pokemonColor,
+          ),
+          PokemonMovesTab(
+            pokemon: pokemon,
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class TabPageViewContainer extends StatelessWidget {
-  const TabPageViewContainer(
-      {Key key, @required this.tabKey, @required this.pageContent})
-      : super(key: key);
+  const TabPageViewContainer({Key key, @required this.tabKey, @required this.pageContent})
+      : assert(pageContent != null),
+        super(key: key);
   final String tabKey;
   final SliverList pageContent;
 
@@ -74,8 +77,11 @@ class SubSectionWidget extends StatelessWidget {
       {Key key,
       this.subSectionHeader,
       this.child,
-      this.isLastSubSection = false,@required this.pokemonColor, this.alignmentType= MainAxisAlignment.spaceBetween})
-      : super(key: key);
+      this.isLastSubSection = false,
+      @required this.pokemonColor,
+      this.alignmentType = MainAxisAlignment.spaceBetween})
+      : assert(pokemonColor != null),
+        super(key: key);
   final String subSectionHeader;
   final Widget child;
   final bool isLastSubSection;
@@ -132,7 +138,8 @@ class SectionTitle extends StatelessWidget {
     Key key,
     @required this.title,
     this.pokemon,
-  }) : super(key: key);
+  })  : assert(title != null),
+        super(key: key);
 
   final String title;
   final Pokemon pokemon;
@@ -148,9 +155,7 @@ class SectionTitle extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-              color: pokemonColor,
-              fontFamily: 'Avenir-Book',
-              fontSize: ScreenUtil.getInstance().setSp(20)),
+              color: pokemonColor, fontFamily: 'Avenir-Book', fontSize: ScreenUtil.getInstance().setSp(20)),
         ),
       ),
     );
@@ -158,8 +163,17 @@ class SectionTitle extends StatelessWidget {
 }
 
 class SectionPanel extends StatelessWidget {
-  const SectionPanel({Key key,@required this.sectionHeader, @required this.child, this.haveHeader = true,@required this.pokemon}) : super(key: key);
-  final String sectionHeader; 
+  const SectionPanel(
+      {Key key,
+      @required this.sectionHeader,
+      @required this.child,
+      this.haveHeader = true,
+      @required this.pokemon})
+      : assert(sectionHeader != null),
+        assert(child != null),
+        assert(pokemon != null),
+        super(key: key);
+  final String sectionHeader;
   final Widget child;
   final bool haveHeader;
   final Pokemon pokemon;

@@ -10,36 +10,32 @@ import 'package:pokedex/components/animation/route_transition_animation.dart';
 import 'package:pokedex/screens/pokemon_page/pokemon_page.dart';
 import 'package:pokedex/services/http/pokemon_service.dart';
 
-
 class PokemonMovesTab extends StatelessWidget {
-  const PokemonMovesTab({Key key, this.pokemon})
-      : super(key: key);
+  const PokemonMovesTab({Key key, this.pokemon}) : super(key: key);
   final Pokemon pokemon;
   @override
   Widget build(BuildContext context) {
-        screenSizeStatus("PokemonMovesTab", context);
-        return Container(
+    screenSizeStatus("PokemonMovesTab", context);
+    return Container(
       color: Color(0xFFffffff),
       child: TabPageViewContainer(
-        tabKey: "MOVES",
-
-        pageContent: SliverList(
-                delegate: SliverChildListDelegate([MovesSection(pokemon: pokemon)]),
-              )
-        ),);
+          tabKey: "MOVES",
+          pageContent: SliverList(
+            delegate: SliverChildListDelegate([MovesSection(pokemon: pokemon)]),
+          )),
+    );
   }
-
 }
 
 class MovesSection extends StatelessWidget {
   const MovesSection({
     Key key,
     @required this.pokemon,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        super(key: key);
 
   final Pokemon pokemon;
-      PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
-
+  PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
 
   @override
   Widget build(BuildContext context) {
@@ -56,38 +52,33 @@ class MovesSection extends StatelessWidget {
     List<PokemonMove> pokemonMovesSorted = pokemon.moves;
     pokemonMovesSorted.sort((a, b) => int.parse(a.levelLearned).compareTo(int.parse(b.levelLearned)));
     List<Widget> movesWidgetList = [];
-    double delayCount= 0.5;
+    double delayCount = 0.5;
     for (var move in pokemonMovesSorted) {
-      if (move.levelLearned !="0") {
-              movesWidgetList.add( 
-                FadeIn(delay: 0.5+ delayCount, child: MoveRowInkwell(pokemonMove: move)));
-      movesWidgetList.add(movesSeparatorWidget);
-      delayCount +=0.5;
+      if (move.levelLearned != "0") {
+        movesWidgetList.add(FadeIn(delay: 0.5 + delayCount, child: MoveRowInkwell(pokemonMove: move)));
+        movesWidgetList.add(movesSeparatorWidget);
+        delayCount += 0.5;
       }
     }
     movesWidgetList.removeLast();
 
-    return 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-
-    Container(
-            padding: EdgeInsets.fromLTRB(
-          ScreenUtil.getInstance().setWidth(15),
-          ScreenUtil.getInstance().setHeight(0),
-          ScreenUtil.getInstance().setWidth(15),
-          ScreenUtil.getInstance().setHeight(0)),
-      child: Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.fromLTRB(
+              ScreenUtil.getInstance().setWidth(15),
+              ScreenUtil.getInstance().setHeight(0),
+              ScreenUtil.getInstance().setWidth(15),
+              ScreenUtil.getInstance().setHeight(0)),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: movesWidgetList,
           ),
-          
-    ),
-                        BottomTabRoundedCorner(pokemonColor: pokemonPageUltility().pokemonColor()),
-
-                  ],
-                );
+        ),
+        BottomTabRoundedCorner(pokemonColor: pokemonPageUltility().pokemonColor()),
+      ],
+    );
   }
 }
 
@@ -95,16 +86,16 @@ class MoveRowWidget extends StatelessWidget {
   const MoveRowWidget({
     Key key,
     @required this.pokemonMove,
-  }) : super(key: key);
+  }) :assert(pokemonMove!= null), super(key: key);
 
   final PokemonMove pokemonMove;
 
   @override
   Widget build(BuildContext context) {
-    String pokemonMoveName =
-        upperCaseEveryWords(pokemonMove.name.replaceAll('-', ' '));
+    String pokemonMoveName = upperCaseEveryWords(pokemonMove.name.replaceAll('-', ' '));
     String levelLearned = "Level " + pokemonMove.levelLearned;
-    String imgDirectory = 'assets/img/type/' + pokemonMovesWithType[pokemonMoveName.toLowerCase().replaceAll(" ", "")]+ ".png";
+    String imgDirectory =
+        'assets/img/type/' + pokemonMovesWithType[pokemonMoveName.toLowerCase().replaceAll(" ", "")] + ".png";
     return Container(
       margin: EdgeInsets.fromLTRB(
           ScreenUtil.getInstance().setWidth(10),
@@ -118,16 +109,15 @@ class MoveRowWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                child: 
-                    Text(
-                      pokemonMoveName,
-                      style: TextStyle(
-                          color: Color(0xFF4F4F4F),
-                          fontFamily: "Avenir-Medium",
-                          height: 1.3,
-                          fontSize: ScreenUtil.getInstance().setSp(19),
-                          fontWeight: FontWeight.w500),
-                    ),
+                child: Text(
+                  pokemonMoveName,
+                  style: TextStyle(
+                      color: Color(0xFF4F4F4F),
+                      fontFamily: "Avenir-Medium",
+                      height: 1.3,
+                      fontSize: ScreenUtil.getInstance().setSp(19),
+                      fontWeight: FontWeight.w500),
+                ),
               ),
               Container(
                 child: Text(
@@ -143,11 +133,11 @@ class MoveRowWidget extends StatelessWidget {
             ],
           ),
           Container(
-             child:           Image.asset(
-            imgDirectory,
-            width: ScreenUtil.getInstance().setWidth(40),
-            height: ScreenUtil.getInstance().setHeight(40),
-          ),
+            child: Image.asset(
+              imgDirectory,
+              width: ScreenUtil.getInstance().setWidth(40),
+              height: ScreenUtil.getInstance().setHeight(40),
+            ),
           )
         ],
       ),
@@ -162,25 +152,24 @@ class MoveRowInkwell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-            String pokemonMoveName =
-        upperCaseEveryWords(pokemonMove.name.replaceAll('-', ' '));
+      onTap: () {
+        String pokemonMoveName = upperCaseEveryWords(pokemonMove.name.replaceAll('-', ' '));
         String type = pokemonMovesWithType[pokemonMoveName.toLowerCase().replaceAll(" ", "")];
         Gradient pokemonGradient = pokemonColorsGradient[type];
-        
-        
-        Navigator.push(context, 
-        FadeRoute(
-          page: 
-          PokemonPage(
-            loadingScreenType: LoadingScreenType.move,
-            pokemonMoveServiceType: PokemonMoveServiceType.url,
-            pokemonGradient: pokemonGradient,
-            moveUrl: pokemonMove.url,
-          )
-        ));
+
+        Navigator.push(
+            context,
+            FadeRoute(
+                page: PokemonPage(
+              loadingScreenType: LoadingScreenType.move,
+              pokemonMoveServiceType: PokemonMoveServiceType.url,
+              pokemonGradient: pokemonGradient,
+              moveUrl: pokemonMove.url,
+            )));
       },
-      child: MoveRowWidget(pokemonMove: pokemonMove,),
+      child: MoveRowWidget(
+        pokemonMove: pokemonMove,
+      ),
     );
   }
 }

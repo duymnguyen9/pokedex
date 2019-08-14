@@ -18,8 +18,8 @@ final int pokemonsCount = 300;
 //This widget is used for making sure the height of Container != 0
 class PokemonListPageBase extends StatelessWidget {
   const PokemonListPageBase({Key key}) : super(key: key);
-  Widget verifyScreenHeight(BuildContext context, double screenheight) {
-    if (screenheight > 10) {
+  Widget verifyScreenHeight(BuildContext context, double screenHeight) {
+    if (screenHeight > 10) {
       return PokemonsListPage();
     } else {
       return Container(
@@ -212,7 +212,8 @@ class PokemonRow extends StatelessWidget {
   const PokemonRow({
     Key key,
     @required this.dataRow,
-  }) : super(key: key);
+  })  : assert(dataRow != null),
+        super(key: key);
 
   final Map dataRow;
 
@@ -241,7 +242,8 @@ class LeftRowComponent extends StatelessWidget {
   const LeftRowComponent({
     Key key,
     @required this.dataRow,
-  }) : super(key: key);
+  })  : assert(dataRow != null),
+        super(key: key);
 
   final Map dataRow;
 
@@ -283,7 +285,8 @@ class RightRowComponent extends StatelessWidget {
   const RightRowComponent({
     Key key,
     @required this.dataRow,
-  }) : super(key: key);
+  })  : assert(dataRow != null),
+        super(key: key);
 
   final Map dataRow;
 
@@ -307,7 +310,9 @@ class RightRowComponent extends StatelessWidget {
 }
 
 class PokemonRowTextContent extends StatelessWidget {
-  const PokemonRowTextContent({Key key, @required this.dataRow}) : super(key: key);
+  const PokemonRowTextContent({Key key, @required this.dataRow})
+      : assert(dataRow != null),
+        super(key: key);
   final Map dataRow;
 
   @override

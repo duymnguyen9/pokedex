@@ -19,7 +19,7 @@ import 'package:http/http.dart' as http;
 class PokemonEvolutionTab extends StatelessWidget {
   const PokemonEvolutionTab(
       {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+      : assert(pokemon!= null),assert(pokemonColor!= null),super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -94,7 +94,7 @@ class EvolutionSection extends StatelessWidget {
     Key key,
     @required this.evolutionChain,
     @required this.pokemonColor,
-  }) : super(key: key);
+  }) :assert(evolutionChain!= null),assert(pokemonColor!= null), super(key: key);
 
   final Map<String, String> evolutionChain;
   final Color pokemonColor;
@@ -144,7 +144,7 @@ class EvolutionSubSection extends StatelessWidget {
     Key key,
     @required this.name,
     @required this.id,
-  }) : super(key: key);
+  }) :assert(name != null), assert(id!= null), super(key: key);
 
   final String name;
   final String id;

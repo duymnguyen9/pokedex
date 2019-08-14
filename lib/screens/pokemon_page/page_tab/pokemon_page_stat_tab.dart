@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-
 //Internal Package
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/components/pokemon_page/pokemon_page_comp.dart';
@@ -15,11 +14,11 @@ import 'package:pokedex/screens/pokemon_page/page_tab/pokemon_page_tab.dart';
 import 'package:pokedex/components/animation/pokemon_page_animation.dart';
 import 'package:pokedex/data/pokemon_color.dart';
 
-
 class PokemonPageStatTab extends StatelessWidget {
-  const PokemonPageStatTab(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonPageStatTab({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -27,53 +26,52 @@ class PokemonPageStatTab extends StatelessWidget {
   Widget build(BuildContext context) {
     // screenSizeStatus("PokemonPageStatTab", context);
     List<Widget> statSectionLists = [
-          PokemonStatSection(
-            pokemon: pokemon,
-            pokemonColor: pokemonColor,
-          ),
-          PokemonAbilitySection(
-            pokemon: pokemon,
-            pokemonColor: pokemonColor,
-          ),
-          PokemonBreedingSection(
-                        pokemon: pokemon,
-            pokemonColor: pokemonColor,
-          ),
-          PokemonCaptureSection(
-            pokemon: pokemon,
-            pokemonColor: pokemonColor,
-          ),
-          PokemonSpritesSection(
-            pokemon: pokemon,
-            pokemonColor: pokemonColor,
-          )
-        ];
-        List<Widget> statSectionListsOutput=[];
-        double delayCount = 0.5;
-        for(var widget in statSectionLists){
-          statSectionListsOutput.add(
-            FadeIn(delay: 1+delayCount,
-            child: widget)
-          );
-          delayCount +=1;
-        }
-        statSectionListsOutput.add(BottomTabRoundedCorner(pokemonColor: pokemonColor,));
+      PokemonStatSection(
+        pokemon: pokemon,
+        pokemonColor: pokemonColor,
+      ),
+      PokemonAbilitySection(
+        pokemon: pokemon,
+        pokemonColor: pokemonColor,
+      ),
+      PokemonBreedingSection(
+        pokemon: pokemon,
+        pokemonColor: pokemonColor,
+      ),
+      PokemonCaptureSection(
+        pokemon: pokemon,
+        pokemonColor: pokemonColor,
+      ),
+      PokemonSpritesSection(
+        pokemon: pokemon,
+        pokemonColor: pokemonColor,
+      )
+    ];
+    List<Widget> statSectionListsOutput = [];
+    double delayCount = 0.5;
+    for (var widget in statSectionLists) {
+      statSectionListsOutput.add(FadeIn(delay: 1 + delayCount, child: widget));
+      delayCount += 1;
+    }
+    statSectionListsOutput.add(BottomTabRoundedCorner(
+      pokemonColor: pokemonColor,
+    ));
     return Container(
       color: Color(0xFFffffff),
       child: TabPageViewContainer(
-        tabKey: "STATS",
-                pageContent: SliverList(
-                delegate: SliverChildListDelegate(statSectionListsOutput),
-              )
-      ),
+          tabKey: "STATS",
+          pageContent: SliverList(
+            delegate: SliverChildListDelegate(statSectionListsOutput),
+          )),
     );
   }
 }
 
 class PokemonStatSection extends StatelessWidget {
-  const PokemonStatSection(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonStatSection({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -82,21 +80,19 @@ class PokemonStatSection extends StatelessWidget {
     List<Widget> pokemonStatsList = [];
     double delaycount = 0.5;
     for (var key in pokemonStatTypesMap.keys) {
-      pokemonStatsList.add(
-        FadeIn(
-          delay: 1+ delaycount,
-                  child: PokemonStatRow(
-                    pokemon: pokemon,
-            pokemonStat:
-                pokemon.stats.firstWhere((stat) => stat.name.trim() == key),
+      pokemonStatsList.add(FadeIn(
+        delay: 1 + delaycount,
+        child: PokemonStatRow(
+            pokemon: pokemon,
+            pokemonStat: pokemon.stats.firstWhere((stat) => stat.name.trim() == key),
             pokemonColor: pokemonColor),
-        ));
-        delaycount+=0.5;
+      ));
+      delaycount += 0.5;
     }
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, ScreenUtil.getInstance().setHeight(15), 0,
-          ScreenUtil.getInstance().setHeight(30)),
+      margin: EdgeInsets.fromLTRB(
+          0, ScreenUtil.getInstance().setHeight(15), 0, ScreenUtil.getInstance().setHeight(30)),
       child: Column(
         children: pokemonStatsList,
       ),
@@ -106,25 +102,25 @@ class PokemonStatSection extends StatelessWidget {
 
 class PokemonStatRow extends StatelessWidget {
   const PokemonStatRow(
-      {Key key, @required this.pokemonStat, @required this.pokemonColor,@required this.pokemon})
-      : super(key: key);
+      {Key key, @required this.pokemonStat, @required this.pokemonColor, @required this.pokemon})
+      : assert(pokemonColor != null),
+        assert(pokemon != null),
+        super(key: key);
   final PokemonStat pokemonStat;
   final Color pokemonColor;
   final Pokemon pokemon;
-    PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
-
+  PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
 
   @override
   Widget build(BuildContext context) {
     double statBarHeight = ScreenUtil.getInstance().setHeight(8);
     double fullBarWidth = ScreenUtil.getInstance().setWidth(240);
-    double statBarWidth =
-        ScreenUtil.getInstance().setWidth((pokemonStat.value / 240) * 240.0);
+    double statBarWidth = ScreenUtil.getInstance().setWidth((pokemonStat.value / 240) * 240.0);
     double statTextWidth = ScreenUtil.getInstance().setWidth(40);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(0, ScreenUtil.getInstance().setHeight(5), 0,
-          ScreenUtil.getInstance().setHeight(5)),
+      margin: EdgeInsets.fromLTRB(
+          0, ScreenUtil.getInstance().setHeight(5), 0, ScreenUtil.getInstance().setHeight(5)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -159,8 +155,7 @@ class PokemonStatRow extends StatelessWidget {
                 width: fullBarWidth,
                 decoration: BoxDecoration(
                     color: Color(0xFFF0F0F0),
-                    borderRadius: BorderRadius.circular(
-                        ScreenUtil.getInstance().setHeight(4))),
+                    borderRadius: BorderRadius.circular(ScreenUtil.getInstance().setHeight(4))),
               ),
 
               //statBar
@@ -188,9 +183,10 @@ class PokemonStatRow extends StatelessWidget {
 }
 
 class PokemonAbilitySection extends StatelessWidget {
-  const PokemonAbilitySection(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonAbilitySection({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -241,18 +237,17 @@ class PokemonAbilitySeparatorWidget extends StatelessWidget {
 }
 
 class PokemonAbilityRow extends StatelessWidget {
-  const PokemonAbilityRow(
-      {Key key, @required this.pokemonAbility, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonAbilityRow({Key key, @required this.pokemonAbility, @required this.pokemonColor})
+      : assert(pokemonAbility != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final PokemonAbility pokemonAbility;
   final Color pokemonColor;
 
   @override
   Widget build(BuildContext context) {
-    String pokemonAbilityName =
-        upperCaseEveryWords(pokemonAbility.name.replaceAll('-', ' '));
-    String pokemonAbilityDescription =
-        pokemonAbility.description.replaceAll('\n', ' ');
+    String pokemonAbilityName = upperCaseEveryWords(pokemonAbility.name.replaceAll('-', ' '));
+    String pokemonAbilityDescription = pokemonAbility.description.replaceAll('\n', ' ');
     bool isHidden = pokemonAbility.isHidden;
 
     Widget isHiddenIcon() {
@@ -315,9 +310,10 @@ class PokemonAbilityRow extends StatelessWidget {
 }
 
 class PokemonBreedingSection extends StatelessWidget {
-  const PokemonBreedingSection(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonBreedingSection({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -338,7 +334,7 @@ class PokemonBreedingSection extends StatelessWidget {
               pokemon: pokemon,
             ),
             GenderContent(
-                            pokemonColor: pokemonColor,
+              pokemonColor: pokemonColor,
               pokemon: pokemon,
             )
           ],
@@ -348,7 +344,8 @@ class PokemonBreedingSection extends StatelessWidget {
 
 class EggGroupContent extends StatelessWidget {
   const EggGroupContent({Key key, @required this.pokemon, this.pokemonColor})
-      : super(key: key);
+      : assert(pokemon != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
   @override
@@ -380,14 +377,17 @@ class EggGroupContent extends StatelessWidget {
 }
 
 class HatchTimeContent extends StatelessWidget {
-  const HatchTimeContent({Key key, @required this.pokemon,@required this.pokemonColor}) : super(key: key);
+  const HatchTimeContent({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
   @override
   Widget build(BuildContext context) {
     return SubSectionWidget(
-      pokemonColor: pokemonColor,
+        pokemonColor: pokemonColor,
         subSectionHeader: "Hatch Time",
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -406,9 +406,10 @@ class HatchTimeContent extends StatelessWidget {
 }
 
 class HatchTimeRowBuild extends StatelessWidget {
-  const HatchTimeRowBuild(
-      {Key key, @required this.isCycle, @required this.pokemon})
-      : super(key: key);
+  const HatchTimeRowBuild({Key key, @required this.isCycle, @required this.pokemon})
+      : assert(isCycle != null),
+        assert(pokemon != null),
+        super(key: key);
   final bool isCycle;
   final Pokemon pokemon;
 
@@ -435,7 +436,10 @@ class HatchTimeRowBuild extends StatelessWidget {
 }
 
 class GenderContent extends StatelessWidget {
-  const GenderContent({Key key,@required this.pokemon,@required this.pokemonColor}) : super(key: key);
+  const GenderContent({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -451,15 +455,12 @@ class GenderContent extends StatelessWidget {
           )
         ];
       } else {
-        return [
-          GenderColumn(pokemon: pokemon),
-          GenderPieChart(pokemon: pokemon)
-        ];
+        return [GenderColumn(pokemon: pokemon), GenderPieChart(pokemon: pokemon)];
       }
     }
 
     return SubSectionWidget(
-      pokemonColor: pokemonColor,
+        pokemonColor: pokemonColor,
         isLastSubSection: true,
         subSectionHeader: "Gender",
         child: Row(
@@ -474,7 +475,8 @@ class GenderPieChart extends StatelessWidget {
   const GenderPieChart({
     Key key,
     @required this.pokemon,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        super(key: key);
 
   final Pokemon pokemon;
 
@@ -503,7 +505,8 @@ class GenderColumn extends StatelessWidget {
   const GenderColumn({
     Key key,
     @required this.pokemon,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        super(key: key);
 
   final Pokemon pokemon;
 
@@ -543,9 +546,10 @@ class GenderColumn extends StatelessWidget {
 }
 
 class PokemonCaptureSection extends StatelessWidget {
-  const PokemonCaptureSection(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonCaptureSection({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
@@ -558,8 +562,14 @@ class PokemonCaptureSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          HabitatContent(pokemon: pokemon, pokemonColor: pokemonColor,),
-          GenerationContent(pokemon: pokemon, pokemonColor: pokemonColor,),
+          HabitatContent(
+            pokemon: pokemon,
+            pokemonColor: pokemonColor,
+          ),
+          GenerationContent(
+            pokemon: pokemon,
+            pokemonColor: pokemonColor,
+          ),
           CaptureRateContent(pokemon: pokemon, pokemonColor: pokemonColor)
         ],
       ),
@@ -568,22 +578,20 @@ class PokemonCaptureSection extends StatelessWidget {
 }
 
 class GenerationContent extends StatelessWidget {
-  const GenerationContent({
-    Key key,
-    @required this.pokemon,
-     @required this.pokemonColor
-  }) : super(key: key);
+  const GenerationContent({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
 
   final Pokemon pokemon;
   final Color pokemonColor;
   @override
   Widget build(BuildContext context) {
     return SubSectionWidget(
-      pokemonColor: pokemonColor,
+        pokemonColor: pokemonColor,
         subSectionHeader: "Generation",
         child: Container(
-          margin:
-              EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
+          margin: EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
           child: Text(
             pokemon.generation,
             style: TextStyle(
@@ -598,11 +606,10 @@ class GenerationContent extends StatelessWidget {
 }
 
 class HabitatContent extends StatelessWidget {
-  const HabitatContent({
-    Key key,
-    @required this.pokemon,
-    @required this.pokemonColor
-  }) : super(key: key);
+  const HabitatContent({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
 
   final Pokemon pokemon;
   final Color pokemonColor;
@@ -610,11 +617,10 @@ class HabitatContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SubSectionWidget(
-      pokemonColor: pokemonColor,
+        pokemonColor: pokemonColor,
         subSectionHeader: "Habitat",
         child: Container(
-          margin:
-              EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
+          margin: EdgeInsets.only(bottom: ScreenUtil.getInstance().setHeight(10)),
           child: Text(
             pokemon.habitat,
             style: TextStyle(
@@ -633,7 +639,9 @@ class CaptureRateContent extends StatelessWidget {
     Key key,
     @required this.pokemon,
     @required this.pokemonColor,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
 
   final Pokemon pokemon;
   final Color pokemonColor;
@@ -641,7 +649,7 @@ class CaptureRateContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SubSectionWidget(
-      pokemonColor: pokemonColor,
+        pokemonColor: pokemonColor,
         isLastSubSection: true,
         subSectionHeader: "Capture Rate",
         child: Row(
@@ -660,7 +668,9 @@ class CaptureRatePieChart extends StatelessWidget {
     Key key,
     @required this.pokemon,
     @required this.pokemonColor,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
 
   final Pokemon pokemon;
   final Color pokemonColor;
@@ -690,7 +700,8 @@ class CaptureRateText extends StatelessWidget {
   const CaptureRateText({
     Key key,
     @required this.pokemon,
-  }) : super(key: key);
+  })  : assert(pokemon != null),
+        super(key: key);
 
   final Pokemon pokemon;
 
@@ -711,30 +722,25 @@ class CaptureRateText extends StatelessWidget {
 }
 
 class PokemonSpritesSection extends StatelessWidget {
-  const PokemonSpritesSection(
-      {Key key, @required this.pokemon, @required this.pokemonColor})
-      : super(key: key);
+  const PokemonSpritesSection({Key key, @required this.pokemon, @required this.pokemonColor})
+      : assert(pokemon != null),
+        assert(pokemonColor != null),
+        super(key: key);
   final Pokemon pokemon;
   final Color pokemonColor;
 
   @override
   Widget build(BuildContext context) {
-    String normalUrl = "https://img.pokemondb.net/sprites/x-y/normal/" +
-        pokemon.name.trim() +
-        ".png";
-    String shinyUrl = "https://img.pokemondb.net/sprites/x-y/shiny/" +
-        pokemon.name.trim() +
-        ".png";
+    String normalUrl = "https://img.pokemondb.net/sprites/x-y/normal/" + pokemon.name.trim() + ".png";
+    String shinyUrl = "https://img.pokemondb.net/sprites/x-y/shiny/" + pokemon.name.trim() + ".png";
     return SectionPanel(
       pokemon: pokemon,
       sectionHeader: "Sprites",
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SpriteSubSection(
-              pokemonColor: pokemonColor, header: 'Normal', url: normalUrl),
-          SpriteSubSection(
-              pokemonColor: pokemonColor, header: 'Shiny', url: shinyUrl),
+          SpriteSubSection(pokemonColor: pokemonColor, header: 'Normal', url: normalUrl),
+          SpriteSubSection(pokemonColor: pokemonColor, header: 'Shiny', url: shinyUrl),
         ],
       ),
     );
@@ -747,7 +753,9 @@ class SpriteSubSection extends StatelessWidget {
     @required this.pokemonColor,
     @required this.header,
     @required this.url,
-  }) : super(key: key);
+  }) : assert(header != null),
+        assert(pokemonColor != null),
+        assert(url != null), super(key: key);
 
   final Color pokemonColor;
   final String header;

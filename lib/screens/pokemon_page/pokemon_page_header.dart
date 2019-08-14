@@ -20,8 +20,7 @@ class PokemonPageHeader extends StatefulWidget {
 }
 
 class _PokemonPageHeaderState extends State<PokemonPageHeader> {
-  PokemonPageUltility pokemonPageUltility() =>
-      PokemonPageUltility(widget.pokemon);
+  PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(widget.pokemon);
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +35,11 @@ class _PokemonPageHeaderState extends State<PokemonPageHeader> {
     return DefaultTabController(
       length: 3,
       child: NestedScrollView(
-        physics: BouncingScrollPhysics(),
+          physics: BouncingScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 child: SliverPersistentHeader(
                   delegate: PokemonAppBar(
                       pokemon: widget.pokemon,
@@ -64,15 +62,14 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
     @required this.expandedHeight,
     this.pokemon,
     this.minHeight,
-  });
+  }) : assert(expandedHeight != null);
   final double expandedHeight;
   final Pokemon pokemon;
   PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
   final double minHeight;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     double defaultScreenWidth = 375.0;
     double defaultScreenHeight = 812.0;
     ScreenUtil.instance = ScreenUtil(
@@ -84,19 +81,16 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
     // print(shrinkOffset);
 
     double roundedBorderSheetPosition() {
-      if (ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) -
-              shrinkOffset >
+      if (ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) - shrinkOffset >
           ScreenUtil.getInstance().setHeight(88)) {
-        return ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) -
-            shrinkOffset;
+        return ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) - shrinkOffset;
       } else {
         return ScreenUtil.getInstance().setHeight(88);
       }
     }
 
     double roundedBorderSheetHeight() {
-      if (ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) -
-              shrinkOffset >
+      if (ScreenUtil.getInstance().setHeight(pokemonSheetTopPosition) - shrinkOffset >
           ScreenUtil.getInstance().setHeight(88)) {
         return ScreenUtil.getInstance().setHeight(350);
       } else if (ScreenUtil.getInstance().setHeight(450) - shrinkOffset > 50) {
@@ -113,8 +107,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
       //       print("minimum height is: " + ScreenUtil.getInstance().setHeight(165).toString());
       // print("calculated Position: " +(minHeight - tabBarHeight).toString() );
 
-      if (ScreenUtil.getInstance().setHeight(499) - shrinkOffset >
-          minHeight - tabBarHeight) {
+      if (ScreenUtil.getInstance().setHeight(499) - shrinkOffset > minHeight - tabBarHeight) {
         return ScreenUtil.getInstance().setHeight(499) - shrinkOffset;
       } else {
         return minHeight - tabBarHeight;
@@ -133,8 +126,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
       if (shrinkOffset < ScreenUtil.getInstance().setHeight(242)) {
         return 0.31;
       } else if (shrinkOffset <= ScreenUtil.getInstance().setHeight(394)) {
-        return 0.35 +
-            (shrinkOffset / ScreenUtil.getInstance().setHeight(394)) * (0.65);
+        return 0.35 + (shrinkOffset / ScreenUtil.getInstance().setHeight(394)) * (0.65);
       } else if (shrinkOffset > expandedHeight - 5) {
         return 1;
       } else
@@ -170,10 +162,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         return 1;
       } else if (shrinkOffset > ScreenUtil.getInstance().setHeight(239) &&
           shrinkOffset < ScreenUtil.getInstance().setHeight(257)) {
-        return 0.98 -
-            (0.98 *
-                ((shrinkOffset - ScreenUtil.getInstance().setHeight(239)) /
-                    (18)));
+        return 0.98 - (0.98 * ((shrinkOffset - ScreenUtil.getInstance().setHeight(239)) / (18)));
       } else if (shrinkOffset >= ScreenUtil.getInstance().setHeight(257)) {
         return 0;
       } else {
@@ -186,10 +175,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
         return 1;
       } else if (shrinkOffset > ScreenUtil.getInstance().setHeight(289) &&
           shrinkOffset < ScreenUtil.getInstance().setHeight(329)) {
-        return 0.98 -
-            (0.98 *
-                ((shrinkOffset - ScreenUtil.getInstance().setHeight(289)) /
-                    (40)));
+        return 0.98 - (0.98 * ((shrinkOffset - ScreenUtil.getInstance().setHeight(289)) / (40)));
       } else if (shrinkOffset >= ScreenUtil.getInstance().setHeight(270)) {
         return 0;
       } else {
@@ -208,8 +194,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
             child: Container(
                 height: ScreenUtil.getInstance().setHeight(170),
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    gradient: pokemonPageUltility().pokemonColorGradient())),
+                decoration: BoxDecoration(gradient: pokemonPageUltility().pokemonColorGradient())),
           ),
         ),
         Positioned(
@@ -227,9 +212,9 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
           top: ScreenUtil.getInstance().setHeight(88) - shrinkOffset,
           child: SwipeDownTrigger(
             child: PokemonMainImage(
-                opacityValue: pokemonImageOpacity(),
-                pokemon: pokemon,
-              ),
+              opacityValue: pokemonImageOpacity(),
+              pokemon: pokemon,
+            ),
           ),
         ),
         //When shrinkOffset gets to 243 changes it to something else
@@ -286,8 +271,7 @@ class PokemonAppBar extends SliverPersistentHeaderDelegate {
             child: FadeIn(
               delay: 5,
               child: IconButton(
-                icon: const Icon(Icons.expand_more,
-                    size: 30, color: Colors.white),
+                icon: const Icon(Icons.expand_more, size: 30, color: Colors.white),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -313,7 +297,7 @@ class PokemonNamePanel extends StatelessWidget {
     @required this.pokemon,
     this.textSize,
     this.brightness,
-  }) : super(key: key);
+  }) : assert(pokemon != null), super(key: key);
 
   final Pokemon pokemon;
   final double textSize;
@@ -324,8 +308,7 @@ class PokemonNamePanel extends StatelessWidget {
     return Container(
         width: MediaQuery.of(context).size.width,
         child: Center(
-          child: Text(
-              pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
+          child: Text(pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
               style: TextStyle(
                   fontFamily: 'Avenir-Book',
                   fontSize: textSize,
@@ -346,8 +329,7 @@ class PokemonDescriptionPanel extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       //color: Color(0xFFFAFAFA),
       padding: EdgeInsets.only(
-          left: ScreenUtil.getInstance().setWidth(20),
-          right: ScreenUtil.getInstance().setWidth(20)),
+          left: ScreenUtil.getInstance().setWidth(20), right: ScreenUtil.getInstance().setWidth(20)),
       child: Center(
         child: Text(pokemon.description.replaceAll('\n', ' '),
             softWrap: true,
@@ -370,15 +352,13 @@ class PokemonTypePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> typeList= [];
-    for(PokemonType type in pokemon.types){
-    String path = 'assets/img/tag/'+ type.typeName + '.png';
-      typeList.add(
-        Image.asset(
-          path,
-          height: ScreenUtil.getInstance().setHeight(40),
-        )
-      );
+    List<Widget> typeList = [];
+    for (PokemonType type in pokemon.types) {
+      String path = 'assets/img/tag/' + type.typeName + '.png';
+      typeList.add(Image.asset(
+        path,
+        height: ScreenUtil.getInstance().setHeight(40),
+      ));
     }
     return Container(
         height: ScreenUtil.getInstance().setHeight(50),
@@ -386,8 +366,8 @@ class PokemonTypePanel extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: typeList, 
-          ));
+          children: typeList,
+        ));
   }
 }
 
@@ -400,8 +380,7 @@ class PokemonPageTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     BoxDecoration tabBarIndicatorBoxDecoration = BoxDecoration(
       color: pokemonPageUltility().pokemonColor(),
-      borderRadius:
-          BorderRadius.circular(ScreenUtil.getInstance().setWidth(22.5)),
+      borderRadius: BorderRadius.circular(ScreenUtil.getInstance().setWidth(22.5)),
       // border: Border.all(
       //     width: widget.screenUtil.setWidth(1), color: const Color(0XFF979797)),
       boxShadow: [
@@ -468,8 +447,7 @@ class PokemonPageTabBar extends StatelessWidget {
 }
 
 class PokemonMainImage extends StatelessWidget {
-  const PokemonMainImage({Key key, this.pokemon, this.opacityValue})
-      : super(key: key);
+  const PokemonMainImage({Key key, this.pokemon, this.opacityValue}) : super(key: key);
   final Pokemon pokemon;
   final double opacityValue;
 
@@ -491,8 +469,7 @@ class PokemonMainImage extends StatelessWidget {
 }
 
 class RoundedBackgroundTop extends StatelessWidget {
-  const RoundedBackgroundTop({Key key, this.bottomHeight, this.pokemon})
-      : super(key: key);
+  const RoundedBackgroundTop({Key key, this.bottomHeight, this.pokemon}) : super(key: key);
   PokemonPageUltility pokemonPageUltility() => PokemonPageUltility(pokemon);
   final Pokemon pokemon;
   final double bottomHeight;
@@ -523,10 +500,8 @@ class SwipeDownTrigger extends StatelessWidget {
       // print("direction value: " + details.globalPosition.direction.toString());
       //       print("delta Primary distance: " + details.primaryDelta.toString());
       if (details.primaryDelta > ScreenUtil.getInstance().setHeight(10) &&
-          (details.globalPosition.distance <= 1.1 ||
-              details.globalPosition.distance >= 0.85))
-
-      Navigator.pop(context);
+          (details.globalPosition.distance <= 1.1 || details.globalPosition.distance >= 0.85))
+        Navigator.pop(context);
     }
 
     return GestureDetector(onVerticalDragUpdate: _onDragDown, child: child);

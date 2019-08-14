@@ -4,7 +4,7 @@ class PokedexTopPanel extends StatelessWidget {
   const PokedexTopPanel({
     Key key,
     @required this.topBarHeight,
-  }) : super(key: key);
+  }) : assert(topBarHeight !=null), super(key: key);
 
   final double topBarHeight;
 
@@ -24,7 +24,7 @@ class PokeDexBottom extends StatelessWidget {
   const PokeDexBottom({
     Key key,
     @required this.topBarHeight,
-  }) : super(key: key);
+  }) : assert(topBarHeight !=null), super(key: key);
 
   final double topBarHeight;
 
