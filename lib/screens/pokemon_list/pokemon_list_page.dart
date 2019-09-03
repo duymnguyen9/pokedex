@@ -88,6 +88,7 @@ class _PokemonsListPageState extends State<PokemonsListPage> {
     return Material(
       child: Stack(overflow: Overflow.visible, children: <Widget>[
         CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics (),
           controller: _hideButtonController,
           slivers: <Widget>[
             SliverPersistentHeader(

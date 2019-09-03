@@ -35,7 +35,7 @@ class _PokemonPageHeaderState extends State<PokemonPageHeader> {
     return DefaultTabController(
       length: 3,
       child: NestedScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverOverlapAbsorber(
